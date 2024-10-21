@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<title>konntya</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+
+
+	<style>
+
+	.form-row {
+		display         : flex;
+		justify-content : center;
+		align-items     : center;
+		margin-bottom   : 10px;
+	}
+
+	.form-row label {
+		display        : flex;
+		justify-content: flex-end;
+		width          : 100px; /* ラベルの幅を固定 */			
+		margin-right   : 20px; /* ラベルと入力フィールドの間のスペース */
+	}
+
+
+	</style>
+
+</head>
+
+<body>
+	<div class="head">
+		<div class="headlinks">
+			<div class="left-links">
+				<a href="home">　HOME　</a>
+				<a href="infiniteQ_Judge">　正誤問題　</a>
+				<a href="infiniteQ_Phrase">　短答問題　</a>
+				<a href="Edit_Judge/new">　編集　</a>
+
+			</div>
+			<div class="right-links">
+			   {{login|safe}}
+			</div>
+		</div>
+		<hr>
+    </div>
+
+	<div style="
+	width : 100%;
+	height: 50px;
+	"
+	>
+	</div>
+
+
+	<form method="POST" action="" class="form-example">
+		<div class="form-row">
+			<label for="input1">name :</label>
+			<input type="text" name="name" autocomplete="off">
+		</div>
+		<div class="form-row">
+			<label for="input1">pass  :</label>
+			<input type="text" name="pass" autocomplete="off">
+		</div>
+
+		<div class="form-row">
+		{{message}}
+		</div>
+
+
+		<div class="form-row">
+		<input type="submit" value="  login  " name="login"/>
+		</div>
+	</form>
+
+	<div style="width : 100%;height: 50px;"></div>
+
+</body>
+
+</html>

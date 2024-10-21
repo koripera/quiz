@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<title>konntya</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+
+	<!-- css-----------------------------------------------------------------------------------------　-->
+	<style>
+
+	body{
+	background-color: #bbbbbb;
+	width:96vw;
+	}
+
+	#answer1{text-align: center;}
+
+
+	table {
+	  border-collapse: collapse;
+	}
+	th, td {
+	  border: solid 1px #333; /* 線の種類 太さ 色 */
+	  text-align:right;
+	}
+
+	.headlink{
+	margin-right : 20px;
+	}
+
+	input[type="text"]{
+	width: 95%;
+	}
+
+	textarea{
+	width: 95%;
+	}
+
+	#command{
+	text-align:center;
+	}
+
+
+	</style>
+	<!--　css----------------------------------------------------------------------------------------　-->
+</head>
+
+
+
+<!--　ここからボディ--------------------------------------------　-->
+<body>
+
+
+	<div class="head">
+		<div class="headlinks">
+			<div class="left-links">
+				<a href="../home">　HOME　</a>
+				<a href="../infiniteQ_Judge">　正誤問題　</a>
+				<a href="../infiniteQ_Phrase">　短答問題　</a>
+			</div>
+			<div class="right-links">
+			   {{login|safe}}
+			</div>
+		</div>
+		<hr>
+    </div>
+	
+	<div style="
+	width : 100%;
+	height: 50px;
+	"
+	>
+	</div>
+
+
+<form method="POST" action="">
+
+	about</br>
+	<input type="text" name="about" value="{{about}}" autocomplete="off"></br>
+	</br>
+
+	ﾀｲﾄﾙ</br>
+	<input type="text" name="title" value="{{title}}" autocomplete="off"></br>
+	</br>
+
+	ﾀｸﾞ</br>
+	<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
+	</br>
+
+	問題文</br>
+	<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
+	</br>
+
+	候補</br>
+	<textarea name="candidate" cols="64" rows="10">{{candidate}}</textarea>
+	</br>
+
+	答え</br>
+	<textarea name="A" cols="64" rows="10">{{A}}</textarea>
+	</br>
+
+	解説</br>
+	<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
+	</br>
+	</br>
+	</br>
+	<div id="command">
+	<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+	</div>
+
+
+</form>
+
+<div style="width : 100%;height: 500px;">
+</div>
+
+
+
+
+</body>
+<!--　ここまでボディ--------------------------------------------　-->
+
+
+
+
+
+
+<script>
+</script>
+
+
+
+</html>

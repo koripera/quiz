@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<title>konntya</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+
+	<style>
+	.about{
+		color:gray;
+		font-size: 80%;
+		padding:0px 15px;
+	}
+
+	.Question{
+		background: #ffffff;
+		word-break: break-all ;
+		border-left: #fceff2 solid 10px;
+		border: #fceff2 solid 1px;
+		font-family: monospace;
+		font-size: 100%;
+		padding: 15px;
+		white-space: pre-wrap;
+	}
+
+	.answer{display: inline-block;}
+
+	.input{position: relative;}
+
+	.item1{text-align: center;}
+
+	.item2{
+		position: absolute;
+		top: 50%;
+		right: 0;
+		transform: translateY(-50%);
+	}
+
+	.result1{
+		white-space: pre-line;
+		padding: 15px;
+
+	}
+
+	.result2{
+		white-space : pre-line;
+		text-align : center;
+		font-size : 16px;
+	}
+
+	.Comment{
+		white-space : pre-wrap;
+		padding: 15px;
+	}
+
+	#change{
+		position: fixed;
+		bottom:0;
+		left: 0;
+		background: #aaaaaa;
+		width : 100%;
+		min-height: 0px;
+	}
+
+	</style>
+</head>
+
+
+
+<body>
+	<div class="head">
+		<div class="headlinks">
+			<div class="left-links">
+				<a href="home">　HOME　</a>
+				<a href="infiniteQ_Judge">　正誤問題　</a>
+				<a href="infiniteQ_Phrase">　短答問題　</a>
+				<a href="Edit_Phrase/new">　編集　</a>
+
+			</div>
+			<div class="right-links">
+			   {{login|safe}}
+			</div>
+		</div>
+		<hr>
+    </div>
+
+	<div style="
+	width : 100%;
+	height: 50px;
+	"
+	>
+	</div>
+
+
+<div id="wrap">
+  <!-- ここに追加される -->
+</div>
+
+
+<div style="
+width : 100%;
+height: 50px;
+"
+>
+</div>
+
+<div id="change">
+	<details><summary></summary>	
+		<form style="text-align:center" method="POST" action="set_search/P">
+			タグ</br>
+			<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
+
+			問題文</br>
+			<input type="text" name="inQ" value="{{inQ}}" autocomplete="off"></br>
+
+			解説文</br>
+			<input type="text" name="inC" value="{{inC}}" autocomplete="off"></br>
+
+			<input type="submit" name="update" value="　　更新　　"  />
+		</form>
+	</details>
+</div>
+
+<script>
+//初期状態のｺﾝﾃﾝﾂ量を計っておく
+let allHeight = Math.max(
+  document.body.scrollHeight, document.documentElement.scrollHeight,
+  document.body.offsetHeight, document.documentElement.offsetHeight,
+  document.body.clientHeight, document.documentElement.clientHeight
+);
+
+//ｽｸﾛｰﾙ監視のｲﾍﾞﾝﾄに制限をかけるため使用、本当は使いたくない
+let clock = 1
+
+
+//答え合わせ・解説のPOST
+function check(Qid,abc,answer,p){
+	fetch('/check_P',
+		{method : "POST",
+		 headers: {"Content-type":"application/json; charset=utf-8"},
+		 body   : JSON.stringify({Qid:Qid,abc:abc,answer:answer})})
+
+	.then(response=>{
+		if(response.ok)
+		{return response.json();}
+		else
+		{return Promise.reject(new Error('エラーです'));}
+		})
+
+	//画面の変更
+	.then(response =>{
+		//ﾎﾞﾀﾝのﾛｯｸ
+		p.parentNode.querySelector('input[name="answer0"]').disabled=true;
+		p.parentNode.querySelector('input[name="answer1"]').disabled=true;
+
+		//取得情報の反映
+		p.parentNode.parentNode.parentNode.parentNode.querySelector(".log").innerHTML=response.log;
+		//p.parentNode.parentNode.parentNode.querySelector(".result1").innerHTML=response.result1;
+		//p.parentNode.parentNode.parentNode.querySelector(".result2").innerHTML=response.result2;
+		//p.parentNode.parentNode.parentNode.querySelector(".Comment").innerHTML=response.Comment;
+		})
+	}
+
+//除外を行う処理
+function remove(Qid,Lid,q){
+	fetch("/remove_P",
+		{method : "POST",
+		 headers: {"Content-type":"application/json; charset=utf-8"},
+		 body   : JSON.stringify({Qid:Qid,Lid:Lid})})
+
+	.then(response=>{
+		if(response.ok)
+		{return response.json();}
+		else
+		{return Promise.reject(new Error('エラーです'));}
+		})
+
+	//画面の変更
+	.then(response =>{
+		//ﾎﾞﾀﾝのﾛｯｸ
+		q.disabled=true;
+		})
+	}
+
+
+//非同期読込、追加
+function addQ(){
+	fetch('/add_P',
+		{method : "POST",
+		 headers: {"Content-type":"application/json; charset=utf-8"},
+		 body   : JSON.stringify({})})
+
+	.then(response=>{
+		if(response.ok)
+		{return response.text();}
+		else
+		{return Promise.reject(new Error('エラーです'));}
+		})
+
+	.then(response =>{
+		const element = document.querySelector('#wrap');
+		const createElement = response;
+		element.insertAdjacentHTML('beforeend', createElement);
+		})
+	}
+
+//ｽｸﾛｰﾙを監視、残りが減ったら、ｺﾝﾃﾝﾂ追加
+window.addEventListener('scroll', ()=> {
+
+	//早くｽｸﾛｰﾙすると同じﾃﾞｰﾀで重複して更新するので、制限をかけておく、糞
+	clock += 1
+	if (clock >= 600){clock=0;}
+	if (clock % 20 ==0){	
+
+	//ﾒｲﾝ部分
+	if (allHeight - window.innerHeight - window.scrollY <= 1000){
+		addQ();
+		allHeight = Math.max(
+		document.body.scrollHeight, document.documentElement.scrollHeight,
+		document.body.offsetHeight, document.documentElement.offsetHeight,
+		document.body.clientHeight, document.documentElement.clientHeight,);
+		}
+
+		}
+	});
+
+//最初の一回分
+addQ();
+allHeight = Math.max(
+document.body.scrollHeight, document.documentElement.scrollHeight,
+document.body.offsetHeight, document.documentElement.offsetHeight,
+document.body.clientHeight, document.documentElement.clientHeight,
+)
+
+</script>
+
+
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

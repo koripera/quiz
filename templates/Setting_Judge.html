@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<title>konntya</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
+<meta name="mobile-web-app-capable" content="yes">
+<!-- css-----------------------------------------------------------------------------------------　-->
+<style>
+
+body{
+background-color: #bbbbbb;
+width:96vw;
+}
+
+.headlink{
+margin-right : 20px;
+}
+
+#answer1{text-align: center;}
+
+
+table {
+  border-collapse: collapse;
+  margin: auto;
+}
+
+th, td {
+  border: solid 1px #333;
+  text-align:left;
+  padding: 3px 10px;/*上下3pxで左右10px*/
+}
+
+#about{
+	color:gray;
+	font-size: 80%;
+	padding:0px 15px;
+}
+
+#Question{
+	background: #ffffff;
+	word-break: break-all ;
+	border-left: #fceff2 solid 10px;
+	border: #fceff2 solid 1px;
+	font-size: 100%;
+	padding: 15px;
+	white-space: pre-wrap;
+}
+
+#control{
+text-align: center;
+}
+
+
+@media screen and (max-width: 700px) {       /*ウィンドウ幅が最大479pxまでの場合に適用*/
+body{
+font-size : 10px;
+width:96vw;
+}
+}
+
+
+
+</style>
+<!--　css----------------------------------------------------------------------------------------　-->
+
+</head>
+
+
+
+<!--　ここからボディ--------------------------------------------　-->
+<body>
+
+
+<span class="headlink"><a href="infiniteQ_Judge">　出題　</a></span>
+<span class="headlink"><a href="Setting_Judge">　設定　</a></span>
+<span class="headlink"><a href="Edit_Judge/new">　編集　</a></span>
+<span class="headlink"><a href="Setting_Phrase">　切替　</a></span>
+<HR>
+</br>
+
+<form method="POST" action="">
+	<div id=answer1>
+
+	問題文<input type="search" name="Qsearch" autocomplete="off" placeholder="キーワードを入力"></br>
+	</br>
+	解説文<input type="search" name="Csearch" autocomplete="off" placeholder="キーワードを入力"></br>
+	</br>
+
+	<input class=”answer” id="answer1" type="submit" value="全て選択" name="answer" />
+	<input class=”answer” id="answer2" type="submit" value="全て解除" name="answer" /></br>
+	</br>
+
+	{{score| safe}}</br>
+	</br>
+
+	<details>
+		<summary>ﾀｸﾞ表示設定</summary>
+		<textarea name="tagset" cols="64" rows="20">{{tag}}</textarea></br>
+		<input class=”update” id="update" type="submit" value="　更新　" name="update" />
+	</details>
+	</br>
+
+
+	<input class=”answer” id="answer1" type="submit" value="　検索　" name="answer" />
+	<HR>
+	{{result_number}}
+	<HR>
+
+	</div>
+</form>
+
+
+<span id="result"></span>
+
+
+
+<div id="wrap">
+  <!-- ここに追加される -->
+</div>
+
+<div style="width : 100%;height: 100px;">
+</div>
+
+
+
+<div id="page" hidden>{{count}}</div>
+</body>
+<!--　ここまでボディ--------------------------------------------　-->
+
+
+<script>
+console.log(document.getElementById('page').textContent);
+
+//初期状態のｺﾝﾃﾝﾂ量を計っておく
+let allHeight = Math.max(
+  document.body.scrollHeight, document.documentElement.scrollHeight,
+  document.body.offsetHeight, document.documentElement.offsetHeight,
+  document.body.clientHeight, document.documentElement.clientHeight
+);
+
+//初期ﾍﾟｰｼﾞ数
+let current = 0
+
+//ｽｸﾛｰﾙ監視のｲﾍﾞﾝﾄに制限をかけるため使用、本当は使いたくない
+let clock = 1
+
+//非同期読込、追加
+function runScript(){
+fetch("/run_J",
+	{method : "POST",
+	 headers: {"Content-type":"application/json; charset=utf-8"},
+	 body   : JSON.stringify({page:current})})
+
+.then(response=>{
+	if(response.ok)
+	{return response.text();}
+	else
+	{return Promise.reject(new Error('エラーです'));}
+	})
+
+.then(response =>{
+	const element = document.querySelector('#wrap');
+	const createElement = response;
+	element.insertAdjacentHTML('beforeend', createElement);
+	current += 1
+	})
+}
+
+//ｽｸﾛｰﾙを監視、残りが減ったら、ｺﾝﾃﾝﾂ追加
+window.addEventListener('scroll', ()=> {
+	console.log(window.scrollY);
+	
+	//早くｽｸﾛｰﾙすると同じﾃﾞｰﾀで重複して更新するので、制限をかけておく、糞
+	clock += 1
+	if (clock >= 600){clock=0;}
+	if (clock % 20 ==0){	
+
+	//ﾒｲﾝ部分
+	if (current <= document.getElementById('page').textContent && allHeight - window.innerHeight - window.scrollY <= 1000){
+		runScript();
+		allHeight = Math.max(
+		document.body.scrollHeight, document.documentElement.scrollHeight,
+		document.body.offsetHeight, document.documentElement.offsetHeight,
+		document.body.clientHeight, document.documentElement.clientHeight,);
+		}
+
+		}
+});
+
+fetch("/run_J",
+	{method : "POST",
+	 headers: {"Content-type":"application/json; charset=utf-8"},
+	 body   : JSON.stringify({page:current})})
+
+.then(response=>{
+	if(response.ok)
+	{return response.text();}
+	else
+	{return Promise.reject(new Error('エラーです'));}
+	})
+
+.then(response =>{
+	const element = document.querySelector('#wrap');
+	const createElement = response;
+	element.insertAdjacentHTML('beforeend', createElement);
+	current += 1
+	})
+
+
+</script>
+
+
+
+
+
+
+
+</html>
