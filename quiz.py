@@ -30,7 +30,7 @@ from waitress import serve
 from DATABASE import DB
 
 """
-tagIDの更新を変更
+tagの簡易切り替え
 """
 #--------------------------------------------
 
@@ -116,7 +116,7 @@ def testdata():
 		"ID"    : ID,
 		"about" : dumps(["math"]),
 		"name"  : "足し算",
-		"Q"     : "1+1={A}\n1+1={B}\n1+1={C}\n1+1={D}\n1+1={E}",
+		"Q"     : "1+1={A}\n2+2={B}\n3+3={C}\n4+4={D}\n5+5={E}",
 		"C"     : "comment",
 	}
 
@@ -211,6 +211,7 @@ def guide_get(mode="",ID=""):
 		"infiniteQ_Phrase": Q_Phrase,  #短答問題の出題
 		"Edit_Judge"      : Edit_J_get,#二択問題の編集画面
 		"Edit_Phrase"     : Edit_P_get,#短答問題の編集画面
+		"tagchange"       : tagchange, #セッションのタグを設定
 	}
 
 	if mode in page  : return page[mode]([mode,ID])
@@ -233,7 +234,7 @@ def guide_post(mode="",ID=""):
 
 	if mode in items : return items[mode]([mode,ID])
 
-def home(path):
+def home(path):#/*{{{*/
 	#過去60日の日付の取得
 	today = datetime.now()
 	dates = list(reversed([(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(60)]))
@@ -322,16 +323,35 @@ def home(path):
 	img2.seek(0)
 	graph_url2 = base64.b64encode(img2.getvalue()).decode()
 
+	#tagを設定するリンクを作る
+	#ﾀｸﾞ名のﾘｽﾄを取得する
+	names = DB().Table("tag").Record().fetch("name")
+	tmp = ""	
+
+	#各ﾀｸﾞに変更するﾘﾝｸを作成する
+	for e in names:
+		#print(e)
+		a = url_for('guide_get', mode = 'tagchange',ID = e[0])
+		#print(a)
+		tmp+=f"""<a href="{a}"> {e[0]} </a><br><br>\n"""	
+
 	# 画像データをHTMLに埋め込む
 	data = render_template(
 		'home.html',
 		login=loguide(), 
 		graph='data:image/png;base64,{}'.format(graph_url),
-		graph2='data:image/png;base64,{}'.format(graph_url2))
+		graph2='data:image/png;base64,{}'.format(graph_url2),
+		taglink = tmp,
+	)
 
 	matplotlib.pyplot.close()
 
-	return data
+	return data#/*}}}*/
+
+def tagchange(path):
+	session.clear()
+	session["tag"]=[path[1],]
+	return redirect(url_for("guide_get",mode="infiniteQ_Judge"))
 
 def login(path):
 	return render_template("login.html",login=loguide())
