@@ -349,7 +349,8 @@ def home(path):#/*{{{*/
 	return data#/*}}}*/
 
 def tagchange(path):
-	session.clear()
+	session["inQ"]=""
+	session["inC"]=""
 	session["tag"]=[path[1],]
 	return redirect(url_for("guide_get",mode="infiniteQ_Judge"))
 
