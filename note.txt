@@ -1,0 +1,101 @@
+--------------------------------------------
+
+ﾃﾞｰﾀﾍﾞｰｽの構成
+
+table:"users"
+(name:str,pass:str)
+
+table:"Score"
+(datetime:datetime,user:str,mode:str,ID:int,chara:str,result:1or0)
+
+table:"common"
+(IDlist_J:picklelist,IDlist_P:picklelist)
+IDlist_J:[int,int...]
+IDlist_P:[int,int...]
+
+table:"Question_J"
+(ID:int, about:pickle&list, name:str, Q:str, A:pickle&taple, C:str)
+about:[str,str,...]
+tag  :[str,str,...]
+A    :(("answer","〇"),("badanswer","×"),)
+
+table:"Question_P"
+(ID:int, about:pickle&list, name:str, Q:str, C:str)
+
+table:"Question_P_v"
+(ID:int,chara:str,answer:str)
+
+table:"Question_J_tag"
+(QID:int,tagID:int)
+
+table:"Question_P_tag"
+(QID:int,tagID:int)
+
+table:"tag"
+(ID:int,name:str)
+
+--------------------------------------------
+
+--------------------------------------------
+endpoint : static
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /static/<path:filename>
+
+endpoint : add_J
+methods  : ['POST', 'OPTIONS']
+url      : /add_J
+
+endpoint : add_P
+methods  : ['POST', 'OPTIONS']
+url      : /add_P
+
+endpoint : check_J
+methods  : ['POST', 'OPTIONS']
+url      : /check_J
+
+endpoint : check_P
+methods  : ['POST', 'HEAD', 'GET', 'OPTIONS']
+url      : /check_P
+
+endpoint : home
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /home
+
+endpoint : infiniteQ_Judge
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /infiniteQ_Judge
+
+endpoint : infiniteQ_Phrase
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /infiniteQ_Phrase
+
+endpoint : set_search
+methods  : ['POST', 'OPTIONS']
+url      : /set_search/<ID>
+
+endpoint : tagchange
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /tagchange/<word>
+
+endpoint : auth.login
+methods  : ['POST', 'HEAD', 'GET', 'OPTIONS']
+url      : /auth/login
+
+endpoint : auth.logout
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /auth/logout
+
+endpoint : edit.judge
+methods  : ['POST', 'HEAD', 'GET', 'OPTIONS']
+url      : /edit/judge/<ID>
+
+endpoint : edit.phrase
+methods  : ['POST', 'HEAD', 'GET', 'OPTIONS']
+url      : /edit/phrase/<ID>
+
+endpoint : routes
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /routes
+
+--------------------------------------------
+

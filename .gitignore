@@ -1,2 +1,7 @@
 #Exclude .db files
 *.db
+
+#Exclude cachefiles
+__pycache__/
+*.pyc
+*.pyo
