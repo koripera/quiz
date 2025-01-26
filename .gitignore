@@ -1,6 +1,8 @@
 #Exclude .db files
 *.db
 
+.venv/
+
 #Exclude cachefiles
 __pycache__/
 *.pyc

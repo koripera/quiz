@@ -8,7 +8,7 @@ from pickle import dumps,loads
 
 from DATABASE import DB
 
-DB.dbname = "DATA.db"
+DB.dbname = "../DATA/DATA.db"
 
 
 def main():

@@ -20,12 +20,12 @@ def main():
 		except:
 			pass
 
-		#ﾃﾞｰﾀ初期化
-		if not os.path.isfile(DB.dbname):
-			init_DB()
+	#ﾃﾞｰﾀ初期化
+	if not os.path.isfile(DB.dbname):
+		init_DB()
 
-			#testﾃﾞｰﾀの挿入
-			testdata()
+		#testﾃﾞｰﾀの挿入
+		testdata()
 
 	#ipの取得
 	try:

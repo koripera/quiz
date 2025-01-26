@@ -43,7 +43,7 @@ def func():
 			datas = random.choices(all_ID,k=10)
 
 			#2**(10-直近10の正解数)[1024, 512, 256, 128, 64, 32, 16, 8, 4, 2,1] 
-			w = [2**(10 - SCORE.result(session["username"],data[0],data[1])[-10:].count(1)) for data in datas]
+			w = [3**(10 - SCORE.result(session["username"],data[0],data[1])[-10:].count(1)) for data in datas]
 			data  = random.choices(datas,weights=w)[0]
 
 		else:

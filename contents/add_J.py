@@ -42,7 +42,8 @@ def func():
 			IDs = random.choices(all_ID,k=10)
 
 			#2**(10-直近10の正解数)[1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1]
-			w = [2**(10 - SCORE.result(session["username"],ID[0],None)[-10:].count(1)) for ID in IDs]
+			#3[59049,19683,6561,2187,729,243,81,27,9,3,1]
+			w = [3**(10 - SCORE.result(session["username"],ID[0],None)[-10:].count(1)) for ID in IDs]
 
 			#choicesはﾘｽﾄで返る
 			ID  = random.choices(IDs,weights=w)[0]
