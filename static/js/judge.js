@@ -5,7 +5,7 @@ let allHeight = Math.max(
   document.body.clientHeight, document.documentElement.clientHeight
 );
 
-//ｽｸﾛｰﾙ監視のｲﾍﾞﾝﾄに制限をかけるため使用、本当は使いたくない
+//ｽｸﾛｰﾙ監視のｲﾍﾞﾝﾄに制限をかけるため使用
 let clock = 1
 
 
@@ -83,7 +83,7 @@ function addQ(){
 //ｽｸﾛｰﾙを監視、残りが減ったら、ｺﾝﾃﾝﾂ追加
 window.addEventListener('scroll', ()=> {
 
-	//早くｽｸﾛｰﾙすると同じﾃﾞｰﾀで重複して更新するので、制限をかけておく、糞
+	//早くｽｸﾛｰﾙすると同じﾃﾞｰﾀで重複して更新するので、制限をかけておく
 	clock += 1
 	if (clock >= 600){clock=0;}
 	if (clock % 20 ==0){	
