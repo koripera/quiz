@@ -45,7 +45,7 @@ def main():
 		if val=="y":
 			clear()
 			print("http://localhost:8000/home")
-			serve(app,port=8000)
+			serve(app,host="127.0.0.1",port=8000)
 			break
 
 		elif val=="n":

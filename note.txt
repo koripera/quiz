@@ -103,6 +103,10 @@ endpoint : edit.phrase
 methods  : ['POST', 'HEAD', 'GET', 'OPTIONS']
 url      : /edit/phrase/<ID>
 
+endpoint : download
+methods  : ['HEAD', 'GET', 'OPTIONS']
+url      : /download
+
 endpoint : routes
 methods  : ['HEAD', 'GET', 'OPTIONS']
 url      : /routes
