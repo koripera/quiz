@@ -12,6 +12,7 @@ from util.tools import clear
 
 def main():
 	DB.dbname=DB_PATH
+	
 
 	if False:
 		#ﾃﾞｰﾀ削除
