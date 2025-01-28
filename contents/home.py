@@ -33,7 +33,9 @@ def func():
 	dates = list(reversed([(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(60)]))
 
 	result=[]   #日付と正答数と誤答数を格納
-	result2=[]  #日付と正答率を格納
+	result2=[]  #日付と二択正答率を格納
+	result3=[]  #日付と短答正答率を格納
+
 	highest=100 #表の上限値、最低100、100超えたらその値
 
 	#検索するﾕｰｻﾞ
@@ -51,26 +53,36 @@ def func():
 		#正答と誤答のｶｳﾝﾄ
 		for date in dates:
 			cur.execute("""
-				SELECT 	SUM(CASE WHEN result = 1 THEN 1 ELSE 0 END) AS ac,
-						SUM(CASE WHEN result = 0 THEN 1 ELSE 0 END) AS wa
-				FROM temp
+				SELECT 	SUM(CASE WHEN mode='Judge' AND result = 1 THEN 1 ELSE 0 END) AS J_ac,
+						SUM(CASE WHEN mode='Judge' AND result = 0 THEN 1 ELSE 0 END) AS J_wa,
+					 	SUM(CASE WHEN mode='Phrase' AND result = 1 THEN 1 ELSE 0 END) AS P_ac,
+						SUM(CASE WHEN mode='Phrase' AND result = 0 THEN 1 ELSE 0 END) AS P_wa
+			FROM temp
 				WHERE datetime BETWEEN ? AND ?;
 			""",(date+" 00:00",date+" 23:59"))
 			res=cur.fetchone()
 
 			res = list(res)
 			if res[0] == None : res[0]=0 
-			if res[1] == None : res[1]=0 
+			if res[1] == None : res[1]=0
+			if res[2] == None : res[2]=0
+			if res[3] == None : res[3]=0
 
 			#表の上限値をﾃﾞｰﾀ量で変える
-			if highest < res[0]+res[1] : highest = res[0]+res[1]
+			if highest < sum(res) : highest = sum(res)
 
-			result.append((date,res[0],res[1]))
+			result.append((date,res[0]+res[2],res[1]+res[3]))
+
 			if res[0]+res[1]!=0:
 				result2.append((date,res[0]/(res[0]+res[1])))
 			else:
 				result2.append((date,None))
-			
+
+			if res[2]+res[3]!=0:
+				result3.append((date,res[2]/(res[2]+res[3])))
+			else:
+				result3.append((date,None))
+		
 	#正答緑、誤答ｵﾚﾝｼﾞの積上棒ｸﾞﾗﾌを作成する
 	fig, ax = plt.subplots(figsize=(16, 9))
 	fig.patch.set_facecolor((0, 0, 0, 0))
@@ -106,9 +118,15 @@ def func():
 	ax.set_xlim(-2, 63)
 	ax.set_ylim(bottom=0,top=1)
 	ax.set_yticks([i/10 for i in range(11)])
-	
+
+	#
 	x=[i for i,e in enumerate(result2) if e[1]!=None]
 	y=[e[1] for e in result2 if e[1]!=None]
+	ax.plot(x,y,marker="o")
+
+	#
+	x=[i for i,e in enumerate(result3) if e[1]!=None]
+	y=[e[1] for e in result3 if e[1]!=None]
 	ax.plot(x,y,marker="o")
 
 	img2 = io.BytesIO()
