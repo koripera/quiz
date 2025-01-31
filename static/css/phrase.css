@@ -9,7 +9,6 @@
 	word-break: break-all ;
 	border-left: #fceff2 solid 10px;
 	border: #fceff2 solid 1px;
-	font-family: monospace;
 	font-size: 100%;
 	padding: 15px;
 	white-space: pre-wrap;
@@ -29,13 +28,13 @@
 }
 
 .result1{
-	white-space: pre-line;
+	white-space: pre-wrap;
 	padding: 15px;
 
 }
 
 .result2{
-	white-space : pre-line;
+	white-space : pre-wrap;
 	text-align : center;
 	font-size : 16px;
 }
@@ -52,4 +51,16 @@
 	background: #aaaaaa;
 	width : 100%;
 	min-height: 0px;
+}
+
+a.tag{
+display:inline-block;
+padding: 2px 25px;
+margin:3px 3px;
+text-decoration: none;
+border-radius: 10px;
+border:solid;
+border-color:#888888;
+color:black;
+background-color:#bbbbbb;
 }

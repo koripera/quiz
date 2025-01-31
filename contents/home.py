@@ -142,7 +142,7 @@ def func():
 	#各ﾀｸﾞに変更するﾘﾝｸを作成する
 	for e in names:
 		#print(e)
-		a = url_for('tagchange',word = e[0])
+		a = url_for('tagchange',word = e[0],link="infiniteQ_Judge")
 		#print(a)
 		tmp+=f"""<a href="{a}"> {e[0]} </a><br><br>\n"""	
 

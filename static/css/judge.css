@@ -11,7 +11,7 @@
 	border: #fceff2 solid 1px;
 	font-size: 100%;
 	padding: 15px;
-	white-space: pre-line;
+	white-space: pre-wrap;
 }
 
 .answer{display: inline-block;}
@@ -28,12 +28,12 @@
 }
 
 .result1{
-	white-space: pre-line;
+	white-space: pre-wrap;
 	text-align: center;
 }
 
 .result2{
-	white-space : pre-line;
+	white-space : pre-wrap;
 	text-align : center;
 	font-size : 16px;
 }
@@ -56,3 +56,14 @@
     width: 100%;
 }
 
+a.tag{
+display:inline-block;
+padding: 2px 25px;
+margin:0px 3px;
+text-decoration: none;
+border-radius: 10px;
+border:solid;
+border-color:#888888;
+color:black;
+background-color:#bbbbbb;
+}

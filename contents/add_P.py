@@ -68,6 +68,12 @@ def func():
 				long = "__"*(width//2)
 				Question["Q"] = Question["Q"].replace("{"+chara+"}",f"[{long}]")
 
+		#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
+		tags_html="\n\ntag:"
+		for tagname in Question["tag"]:
+			link = url_for('tagchange',word = tagname,link="infiniteQ_Phrase")
+			tags_html += f"""<a class="tag" href="{link}"> {tagname} </a>"""
+
 
 		QSET10 += render_template(
 						'parts/QSET_Phrase.html',
@@ -75,7 +81,7 @@ def func():
 						about     = f"< {' '.join( Question['about']) } >",
 						Q         = Question["Q"],
 						A         = "答："+answer,
-						C         = Question["C"],
+						C         = Question["C"]+tags_html,
 						Q_id      = ID,
 						abc       = f"'{chara}'"
 						)		

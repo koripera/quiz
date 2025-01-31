@@ -16,7 +16,12 @@ args={
 }
 #------------------------------#
 
-from flask import render_template, session, request
+from flask import (
+	render_template,
+	session,
+	request,
+	url_for,
+)
 
 from core.QUESTION import QUESTION
 from core.SCORE import SCORE
@@ -34,10 +39,16 @@ def func():
 	A      = "〇を押しました" if answer else "×を押しました"
 	result = "<font color='red'>正解</font>" if ans==answer else "<font color='blue'>不正解</font>"
 
+	#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
+	tags_html=""
+	for tagname in Qdata["tag"]:
+		link = url_for('tagchange',word = tagname,link="infiniteQ_Judge")
+		tags_html += f"""<a class="tag" href="{link}"> {tagname} </a>"""	
+
 	ret = {
 		"result1" : A,
 		"result2" : result,
-		"Comment" : f"{Qdata['C']}\n\ntag:{','.join(Qdata['tag'])}"
+		"Comment" : f"{Qdata['C']}\n\ntag:{tags_html}"
 	}
 
 	#回答を記録
