@@ -144,7 +144,7 @@ def func():
 		#print(e)
 		a = url_for('tagchange',word = e[0],link="infiniteQ_Judge")
 		#print(a)
-		tmp+=f"""<a href="{a}"> {e[0]} </a><br><br>\n"""	
+		tmp+=f"""<a class="tag" href="{a}"> {e[0]} </a>"""	
 
 	# 画像データをHTMLに埋め込む
 	page = render_template(

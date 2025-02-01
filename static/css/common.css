@@ -40,4 +40,14 @@ textarea{
 	gap: 20px; /* リンク間のスペースを調整 */
 }
 
-
+a.tag{
+	display          : inline-block;
+	padding          : 0.05rem 1rem;
+	margin           : 0.5rem;
+	text-decoration  : none;
+	border-radius    : 0.5rem;
+	border           : solid;
+	border-color     : #888888;
+	color            : black;
+	background-color : #bbbbbb;
+}
