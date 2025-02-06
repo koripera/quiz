@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-	<title>konntya</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
-	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
-
-	<!-- css-----------------------------------------------------------------------------------------　-->
+{% block head -%}
 	<style>
 
 	body{
@@ -17,7 +9,6 @@
 	}
 
 	#answer1{text-align: center;}
-
 
 	table {
 	  border-collapse: collapse;
@@ -42,20 +33,11 @@
 	#command{
 	text-align:center;
 	}
-
-
 	</style>
-	<!--　css----------------------------------------------------------------------------------------　-->
-</head>
 
+{%- endblock %}
 
-
-<!--　ここからボディ--------------------------------------------　-->
-<body>
-
-	{{headlinks|safe}}
-
-
+{% block body -%}
 	<form method="POST" action="">
 
 		about</br>
@@ -98,21 +80,4 @@
 
 	<div style="width : 100%;height: 500px;">
 	</div>
-
-
-
-
-</body>
-<!--　ここまでボディ--------------------------------------------　-->
-
-
-
-
-
-
-<script>
-</script>
-
-
-
-</html>
+{%- endblock %}

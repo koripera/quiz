@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<title>{% block title %}konntya{% endblock %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	{% include "parts/headlinks.html" %}
+
+	{% block body %}{% endblock %}
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

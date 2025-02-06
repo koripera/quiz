@@ -149,7 +149,6 @@ def func():
 	# 画像データをHTMLに埋め込む
 	page = render_template(
 		'home.html',
-		headlinks   = parts.headlink(), 
 		graph       = 'data:image/png;base64,{}'.format(graph_url),
 		graph2      = 'data:image/png;base64,{}'.format(graph_url2),
 		taglink     = tmp,

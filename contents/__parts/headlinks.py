@@ -13,6 +13,7 @@ def headlink():
 		home   = myurl_for("home"),
 		Judge  = myurl_for("infiniteQ_Judge"),
 		Phrase = myurl_for("infiniteQ_Phrase"),
+		note   = myurl_for("note"),
 		login  = A if "username" in session else B,
 	)
 

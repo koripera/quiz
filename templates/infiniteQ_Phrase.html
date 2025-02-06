@@ -1,47 +1,37 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-	<title>konntya</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
-	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+{% block head -%}
 	<link rel="stylesheet" href="{{url_for('static', filename='css/phrase.css')}}">
-</head>
+{%- endblock %}
 
-<body>
-{{headlinks|safe}}
+{% block body -%}
+	<div id="wrap">
+	  <!-- ここに追加される -->
+	</div>
 
-<div id="wrap">
-  <!-- ここに追加される -->
-</div>
+	<div style="
+	width : 100%;
+	height: 50px;
+	"
+	>
+	</div>
 
-<div style="
-width : 100%;
-height: 50px;
-"
->
-</div>
+	<div id="change">
+		<details><summary></summary>	
+			<form style="text-align:center" method="POST" action="set_search/P">
+				タグ</br>
+				<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
 
-<div id="change">
-	<details><summary></summary>	
-		<form style="text-align:center" method="POST" action="set_search/P">
-			タグ</br>
-			<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
+				問題文</br>
+				<input type="text" name="inQ" value="{{inQ}}" autocomplete="off"></br>
 
-			問題文</br>
-			<input type="text" name="inQ" value="{{inQ}}" autocomplete="off"></br>
+				解説文</br>
+				<input type="text" name="inC" value="{{inC}}" autocomplete="off"></br>
 
-			解説文</br>
-			<input type="text" name="inC" value="{{inC}}" autocomplete="off"></br>
+				<input type="submit" name="update" value="　　更新　　"  />
+			</form>
+		</details>
+	</div>
 
-			<input type="submit" name="update" value="　　更新　　"  />
-		</form>
-	</details>
-</div>
-
-<script src="{{url_for('static',filename='js/phrase.js')}}"></script>
-</body>
-
-</html>
+	<script src="{{url_for('static',filename='js/phrase.js')}}"></script>
+{%- endblock %}

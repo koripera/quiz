@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-	<title>konntya</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
-	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
+{% block head %}
+	<style>
+	img { width: 100%; height: auto; }
+	</style>
+{% endblock %}
 
-<style>
-
-img { width: 100%; height: auto; }
-
-</style>
-
-</head>
-
-<body>
-	{{headlinks|safe}}
-
+{% block body %}
 	<h2>回答数</h2><img src="{{ graph }}" alt="Matplotlib Plot">
 	<h2>正答率</h2><img src="{{ graph2 }}" alt="Matplotlib Plot">
 	<h2>タグ</h2>
@@ -30,21 +18,5 @@ img { width: 100%; height: auto; }
 	"
 	>
 	</div>
+{% endblock %}
 
-</body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html>

@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-	<title>konntya</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no" />
-	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/common.css')}}">
-
-	<!-- css-----------------------------------------------------------------------------------------　-->
+{% block head -%}
 	<style>
 		#answer1{text-align: center;}
 
@@ -32,90 +24,66 @@
 		text-align:center;
 		}
 	</style>
-	<!--　css----------------------------------------------------------------------------------------　-->
-</head>
+{%- endblock %}
+
+{% block body -%}
+	<form method="POST" action="">
+
+		about</br>
+		<input type="text" name="about" value="{{about}}" autocomplete="off"></br>
+		</br>
+
+		ﾀｲﾄﾙ</br>
+		<input type="text" name="title" value="{{title}}" autocomplete="off"></br>
+		</br>
+
+		ﾀｸﾞ</br>
+		<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
+		</br>
+
+		問題文</br>
+		<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
+		</br>
+
+		A</br>
+		<textarea name="A" cols="64" rows="2">{{A}}</textarea></br>
+		</br>
+
+		B</br>
+		<textarea name="B" cols="64" rows="2">{{B}}</textarea></br>
+		</br>
+
+		C</br>
+		<textarea name="C" cols="64" rows="2">{{C}}</textarea></br>
+		</br>
+
+		D</br>
+		<textarea name="D" cols="64" rows="2">{{D}}</textarea></br>
+		</br>
+
+		E</br>
+		<textarea name="E" cols="64" rows="2">{{E}}</textarea></br>
+		</br>
+
+		N</br>
+		<textarea name="N" cols="64" rows="2">{{N}}</textarea></br>
+		</br>
 
 
-
-<!--　ここからボディ--------------------------------------------　-->
-<body>
-	{{headlinks|safe}}
-
-
-<form method="POST" action="">
-
-	about</br>
-	<input type="text" name="about" value="{{about}}" autocomplete="off"></br>
-	</br>
-
-	ﾀｲﾄﾙ</br>
-	<input type="text" name="title" value="{{title}}" autocomplete="off"></br>
-	</br>
-
-	ﾀｸﾞ</br>
-	<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
-	</br>
-
-	問題文</br>
-	<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
-	</br>
-
-	A</br>
-	<textarea name="A" cols="64" rows="2">{{A}}</textarea></br>
-	</br>
-
-	B</br>
-	<textarea name="B" cols="64" rows="2">{{B}}</textarea></br>
-	</br>
-
-	C</br>
-	<textarea name="C" cols="64" rows="2">{{C}}</textarea></br>
-	</br>
-
-	D</br>
-	<textarea name="D" cols="64" rows="2">{{D}}</textarea></br>
-	</br>
-
-	E</br>
-	<textarea name="E" cols="64" rows="2">{{E}}</textarea></br>
-	</br>
-
-	N</br>
-	<textarea name="N" cols="64" rows="2">{{N}}</textarea></br>
-	</br>
+		解説</br>
+		<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
+		</br>
+		</br>
+		</br>
+		<div id="command">
+		<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
 
 
-	解説</br>
-	<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
-	</br>
-	</br>
-	</br>
-	<div id="command">
-	<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+	</form>
+
+	<div style="width : 100%;height: 500px;">
 	</div>
-
-
-</form>
-
-<div style="width : 100%;height: 500px;">
-</div>
-
-
-
-
-</body>
-<!--　ここまでボディ--------------------------------------------　-->
-
-
-
-
-
-
-<script>
-</script>
-
-
-
-</html>
+{%- endblock %}

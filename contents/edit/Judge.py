@@ -35,6 +35,9 @@ def Edit_J_get(ID):
 		)
 
 		return page
+
+	elif ID == "list":
+		pass
 	
 	else:#既存ﾃﾞｰﾀの表示
 		#問題の辞書ﾃﾞｰﾀ取得
@@ -73,3 +76,6 @@ def Edit_J_post(ID):
 		#ﾃﾞｰﾀ削除後、新規作成ﾍﾟｰｼﾞに移動			
 		QUESTION.JUDGE.delete(ID)
 		return redirect(url_for("edit.judge",ID="new"))
+
+def datalist():
+	pass

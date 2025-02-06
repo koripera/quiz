@@ -1,21 +1,24 @@
-<div class="head">
-	<div class="headlinks">
-		<div class="left-links">
-			<a href="{{home}}">　HOME　</a>
-			<a href="{{Judge}}">　正誤問題　</a>
-			<a href="{{Phrase}}">　短答問題　</a>
-
+	<div class="head">
+		<div class="headlinks">
+			<div class="left-links">
+				<a href="{{url_for('home')}}">　HOME　</a>
+				<a href="{{url_for('infiniteQ_Judge')}}">　正誤問題　</a>
+				<a href="{{url_for('infiniteQ_Phrase')}}">　短答問題　</a>
+				<a href="{{url_for('note')}}">　ノート　</a>
+			</div>
+			<div class="right-links">
+				{% if 'username' not in session -%}
+				<a href="{{url_for('auth.login')}}">　ログイン　</a>
+				{%- else -%}
+				<a href="{{url_for('auth.logout')}}">　ログアウト　</a>
+				{%- endif %}
+			</div>
 		</div>
-		<div class="right-links">
-		   {{login|safe}}
-		</div>
+		<hr>
 	</div>
-	<hr>
-</div>
 
-<div style="
-width : 100%;
-height: 50px;
-"
->
-</div>
+	<div style="
+	width : 100%;
+	height: 50px;
+	">
+	</div>
