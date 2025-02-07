@@ -51,3 +51,38 @@ a.tag{
 	color            : black;
 	background-color : #bbbbbb;
 }
+
+div.quote{
+border-left: 4px solid #888;
+color:#555;
+font-size:90%;
+white-space: normal;
+margin:0;
+padding:0;
+}
+
+div.quote > #text{
+margin:0;
+}
+
+div.quote > p{
+margin:0;
+}
+
+div.quote > ul{
+margin:0;
+}
+
+div.quote > li{
+padding-top:0;
+padding-bottom:0;
+}
+
+table{
+margin:1em;
+}
+div.quote > table,
+th,
+td{
+border:1px solid;
+}

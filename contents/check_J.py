@@ -16,15 +16,25 @@ args={
 }
 #------------------------------#
 
+import re
+from textwrap import dedent
+
 from flask import (
 	render_template,
 	session,
 	request,
 	url_for,
 )
+import markdown
 
 from core.QUESTION import QUESTION
 from core.SCORE import SCORE
+from core.NOTE import NOTE
+
+from libs.DATABASE import DB
+from setting import DB_PATH
+
+DB.dbname=DB_PATH
 
 def func():
 	#答え合わせを行う#jsonを受け取り、jsonを返す
@@ -50,6 +60,35 @@ def func():
 		"result2" : result,
 		"Comment" : f"{Qdata['C']}\n\ntag:{tags_html}"
 	}
+
+	#ﾉｰﾄからの引用をできるように・・・
+	md = markdown.Markdown(extensions=["fenced_code","tables"])
+	for name in re.findall(r"{(.*?)}", ret["Comment"]):
+		q=dedent(
+		f"""
+		SELECT id 
+		FROM note
+		WHERE name = "{name}"
+		""")
+
+		with DB().connect as d:
+			conn,cur = d
+			res = cur.execute(q)
+			ID = res.fetchone()
+
+		if ID!=None:
+			ID=ID[0]
+			print(ID,name)
+			data = NOTE.get(ID)
+			content = md.convert(data["content"])
+
+			ret["Comment"] = ret["Comment"].replace("}\n","}")
+
+			content = ret["Comment"].replace(
+				"{"+name+"}",
+				f"<div class='quote'>{content}</div>",
+			).strip()
+			ret["Comment"] = content
 
 	#回答を記録
 	if "username" in session:

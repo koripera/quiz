@@ -18,8 +18,23 @@ args={
 
 from flask import render_template,session,request,redirect,url_for
 import contents.__parts as parts
+from core.NOTE import NOTE
 
 def func():
-	return render_template("base.html")
+
+	idlist = [e[0] for e in NOTE.valid_id()]
+
+	links=""
+	for ID in idlist:
+		data = NOTE.get(ID)
+		url = url_for("edit.note",ID=ID)
+		links += f"""<li><a href="{url}">{data["name"]}</a></li>\n"""
+
+	links = f"<ul>{links}</ul>"
+
+	return render_template(
+		"note.html",
+		body = links,
+	)
 
 
