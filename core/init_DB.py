@@ -16,6 +16,8 @@ def init_DB():#DBﾌｧｲﾙがないときの設定を行う
 	QP_tag = data.add_table("Question_P_tag" ,["QID","tagID"])
 	QP_v   = data.add_table("Question_P_v"   ,["ID","chara","answer"])
 	tag    = data.add_table("tag"            ,["ID","name"])
+	note   = data.add_table("note"           ,["ID","name","content"])
+	N_tag  = data.add_table("note_tag"       ,["NID","tag_id"])
 
 	#scoreの日付にｲﾝﾃﾞｯｸｽ
 	with data.connect as d:
