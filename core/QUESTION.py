@@ -57,7 +57,7 @@ class QUESTION:
 		with DB().connect as d:
 			conn,cur = d
 
-			#judge側でタグ利用されているか
+			#judgeのﾀｸﾞ利用ﾁｪｯｸ
 			q=dedent(
 			f"""
 			SELECT DISTINCT Question_J.ID FROM Question_J
@@ -65,23 +65,37 @@ class QUESTION:
 			JOIN tag ON Question_J_tag.tagID = tag.ID
 			WHERE tag.name = "{name}"
 			""")
-
 			cur.execute(q)
-
 			jtag = cur.fetchall()#ﾚｺｰﾄﾞがなければ空のﾘｽﾄ
+			if jtag:return#ﾚｺｰﾄﾞ有りなら中断
 
-			if not jtag:
-				q=dedent(
-				f"""
-				SELECT DISTINCT Question_P.ID FROM Question_P
-				JOIN Question_P_tag ON Question_P.id = Question_P_tag.QID
-				JOIN tag ON Question_P_tag.tagID = tag.ID
-				WHERE tag.name = "{name}"
-				""")
-				cur.execute(q)
-				ptag = cur.fetchall()
-				if not ptag:
-					DB().Table("tag").Record(f"name='{name}'").delete()
+			#phraseのﾀｸﾞ利用ﾁｪｯｸ
+			q=dedent(
+			f"""
+			SELECT DISTINCT Question_P.ID FROM Question_P
+			JOIN Question_P_tag ON Question_P.id = Question_P_tag.QID
+			JOIN tag ON Question_P_tag.tagID = tag.ID
+			WHERE tag.name = "{name}"
+			""")
+			cur.execute(q)
+			ptag = cur.fetchall()
+			if ptag:return
+
+			#noteのﾀｸﾞ利用ﾁｪｯｸ
+			q=dedent(
+			f"""
+			SELECT DISTINCT note.ID FROM note
+			JOIN note_tag ON note.id = note_tag.NID
+			JOIN tag ON note_tag.tagID = tag.ID
+			WHERE tag.name = "{name}"
+			""")
+			cur.execute(q)
+			ntag = cur.fetchall()
+			if ntag:return
+
+		#judge.phrase.noteいずれでも使われてないなら、ﾀｸﾞのﾚｺｰﾄﾞを削除
+		DB().Table("tag").Record(f"name='{name}'").delete()
+
 
 	class JUDGE:
 		def valid_id(tag=None,inQ="",inC=""):

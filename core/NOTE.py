@@ -82,7 +82,6 @@ class NOTE:
 			""")
 			cur.execute(q)
 			ptag = cur.fetchall()
-
 			if ptag:return
 
 			#noteのﾀｸﾞ利用ﾁｪｯｸ
@@ -95,7 +94,6 @@ class NOTE:
 			""")
 			cur.execute(q)
 			ntag = cur.fetchall()
-
 			if ntag:return
 
 		#judge.phrase.noteいずれでも使われてないなら、ﾀｸﾞのﾚｺｰﾄﾞを削除
