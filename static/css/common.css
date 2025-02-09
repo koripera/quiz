@@ -5,7 +5,10 @@ width:96vw;
 
 /*ｳｲﾝﾄﾞｳ幅が700px以下で適用*/
 @media screen and (max-width: 700px) {
-body{font-size : 10px;}
+body{
+	font-size   : 10px;
+	font-family : monospace;
+}
 
 input[type="text"]{
 	font-size:10px;
