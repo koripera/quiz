@@ -17,6 +17,8 @@ args={
 #------------------------------#
 
 from flask import render_template,session,request,redirect,url_for
+import markdown
+
 from core.NOTE import NOTE
 
 import contents.__parts as parts
@@ -28,6 +30,9 @@ def func(ID):
 		return Edit_note_post(ID)
 
 def Edit_note_get(ID):
+
+	md = markdown.Markdown(extensions=["fenced_code","tables"])
+
 	if ID == "new":#新規ﾃﾞｰﾀ
 		page = render_template(
 			'Edit_Note.html',
@@ -42,6 +47,8 @@ def Edit_note_get(ID):
 		#問題の辞書ﾃﾞｰﾀ取得
 		data = NOTE.get(ID)
 
+		content = md.convert(data["content"])
+
 		#該当IDがなければ、404ｴﾗｰ
 		if data==None:return "nopage",404		
 	
@@ -50,6 +57,7 @@ def Edit_note_get(ID):
 			title     = data["name"],
 			tag       = ",".join(data["tag"]),
 			content   = data["content"],
+			body      = content,
 		)
 
 		return result_html
