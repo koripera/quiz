@@ -197,8 +197,6 @@ class NOTE:
 			"name"    : request.form.get("title"),
 			"content" : request.form.get("content").replace('\r\n','\n').strip(),
 		}
-
-		#問題と回答をそれぞれ追加
 		DB().Table("note").add_record(insdata)
 
 		#ﾀｸﾞを追加する
@@ -213,12 +211,22 @@ class NOTE:
 	def update(ID,request):
 		#問題ﾃﾞｰﾀの更新を行う
 
+		#旧ﾃﾞｰﾀのﾀｲﾄﾙを取得しておく	
+		name = NOTE.get(ID)["name"]
+		
 		#挿入ﾃﾞｰﾀを作成し、入力をﾃﾞｰﾀﾍﾞｰｽに入れる
 		insdata={
 			"ID"      : ID,
 			"name"    : request.form.get("title"),
 			"content" : request.form.get("content").replace('\r\n','\n').strip(),
 		}
+
+		#judge/phraseのｺﾒﾝﾄの参照を置き換えなおす
+		for QID,C in DB().Table("Question_J").Record(f"C LIKE '%{name}%'").fetch(["ID","C"]):
+			DB().Table("Question_J").Record(f"ID={QID}").update({"C":C.replace("{"+name+"}","{"+request.form.get("title")+"}")})
+
+		for QID,C in DB().Table("Question_P").Record(f"C LIKE '%{name}%'").fetch(["ID","C"]):
+			DB().Table("Question_P").Record(f"ID={QID}").update({"C":C.replace("{"+name+"}","{"+request.form.get("title")+"}")})
 
 		#ﾃﾞｰﾀﾍﾞｰｽに反映
 		DB().Table("note").Record(f"ID='{ID}'").update(insdata)
