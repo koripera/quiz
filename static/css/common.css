@@ -1,24 +1,32 @@
 body{
 background-color: #bbbbbb;
 width:96vw;
+font-family : "monospace";
+}
+
+input[type="text"]{
+	width: 100%;
+}
+
+textarea{
+	width: 100%;
 }
 
 /*ｳｲﾝﾄﾞｳ幅が700px以下で適用*/
 @media screen and (max-width: 700px) {
+
 body{
 	font-size   : 10px;
-	font-family : "monospace";
 }
 
 input[type="text"]{
 	font-size:10px;
-	width: 95%;
 }
 
 textarea{
 	font-size:10px;
-	width: 95%;
 }
+
 
 }
 
@@ -84,8 +92,6 @@ padding-bottom:0;
 table{
 margin:1em;
 }
-div.quote > table,
-th,
-td{
+table,th,td{
 border:1px solid;
 }

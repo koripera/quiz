@@ -21,8 +21,11 @@ import contents.__parts as parts
 from core.NOTE import NOTE
 
 def func():
+	if "inQ" not in session:session["inQ"]=""
+	if "inC" not in session:session["inC"]=""
+	if "tag" not in session:session["tag"]=[]
 
-	idlist = [e[0] for e in NOTE.valid_id()]
+	idlist = [e[0] for e in NOTE.valid_id(tag=session["tag"])]
 
 	links=""
 	for ID in idlist:
@@ -32,9 +35,15 @@ def func():
 
 	links = f"<ul>{links}</ul>"
 
+	if not idlist:
+		links = "No relevant data"
+
 	return render_template(
 		"note.html",
 		body = links,
+		tag=" ".join(session["tag"]),
+		inQ=session["inQ"],
+		inC=session["inC"],
 	)
 
 

@@ -25,3 +25,5 @@ def func(ID):
 		return redirect(url_for("infiniteQ_Judge"))
 	if ID=="P":
 		return redirect(url_for("infiniteQ_Phrase"))
+	if ID=="N":
+		return redirect(url_for("note"))
