@@ -19,6 +19,7 @@ args={
 from flask import render_template,session,request,redirect,url_for
 import markdown
 
+from core.QUESTION import QUESTION
 from core.NOTE import NOTE
 
 import contents.__parts as parts
@@ -44,20 +45,37 @@ def Edit_note_get(ID):
 		pass
 	
 	else:#既存ﾃﾞｰﾀの表示
-		#問題の辞書ﾃﾞｰﾀ取得
+		#noteの辞書ﾃﾞｰﾀ取得
 		data = NOTE.get(ID)
 
+		#該当IDがなければ、404ｴﾗｰ
+		if data==None:return "nopage",404
+
+		#noteの内容をhtmlに変換
 		content = md.convert(data["content"])
 
-		#該当IDがなければ、404ｴﾗｰ
-		if data==None:return "nopage",404		
-	
+		#ﾀｲﾄﾙが含まれる問題を取得する
+		all_ID_J = QUESTION.JUDGE.valid_id(inC="{"+data["name"]+"}")
+		all_ID_P = QUESTION.PHRASE.valid_id(inC="{"+data["name"]+"}")
+
+		#出題可能な問題がなければ、処理しない
+		if not all_ID_J + all_ID_P:
+			question = "noQuestion"
+		else:
+			question=""
+			for e in all_ID_J:
+				question+=QUESTION.JUDGE.to_html(e[0])
+			for e in all_ID_P:
+				question+=QUESTION.PHRASE.to_html(e[0],e[1])
+
+		#内容の表示
 		result_html = render_template(
 			'Edit_Note.html',
 			title     = data["name"],
 			tag       = ",".join(data["tag"]),
 			content   = data["content"],
 			body      = content,
+			question  = question,
 		)
 
 		return result_html

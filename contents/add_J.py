@@ -50,22 +50,8 @@ def func():
 
 		else:
 			ID = random.choice(all_ID)
-	
-		#問題ﾃﾞｰﾀの取得
-		Question = QUESTION.JUDGE.get(ID[0])
 
-		#問題ﾃﾞｰﾀの一部の置き換え
-		num = random.randrange(len(Question["A"]))
-		Q_txt = Question["Q"].replace("{x}",Question["A"][num][0])
-
-		#ID,部分変換のindex,問題文等をHTMLに記入
-		QSET10 += render_template(
-			'parts/QSET_Judge.html',
-			to_edit       = url_for("edit.judge",ID=ID[0]),
-			Q_id          = ID[0],
-			Q_num         = num,
-			about         = f"< {' '.join(Question['about'])} >",
-			Q_txt         = Q_txt,								  
-		)
+		#
+		QSET10 += QUESTION.JUDGE.to_html(ID[0])
 
 	return QSET10

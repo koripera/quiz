@@ -1,13 +1,19 @@
 from textwrap import dedent
-
 import pickle
 import bisect
 import re
+import random
 from operator import itemgetter as iget
 
+from flask import render_template,url_for
+import markdown
+
 from libs.DATABASE import DB
+
+from core.NOTE import NOTE
 from setting import DB_PATH
 from util.tools import missingnum
+from util.tools import get_east_asian_width_count
 
 DB.dbname=DB_PATH
 
@@ -152,6 +158,26 @@ class QUESTION:
 
 				#ﾀﾌﾟﾙのまま返す			
 				return cur.fetchall()
+
+		def to_html(ID):
+			#IDからhtmlの出題形式で出力
+
+			#問題ﾃﾞｰﾀの取得
+			Question = QUESTION.JUDGE.get(ID)
+
+			#問題ﾃﾞｰﾀの一部の置き換え
+			num = random.randrange(len(Question["A"]))
+			Q_txt = Question["Q"].replace("{x}",Question["A"][num][0])
+
+			#ID,部分変換のindex,問題文等をHTMLに記入
+			return render_template(
+				'parts/QSET_Judge.html',
+				to_edit       = url_for("edit.judge",ID=ID),
+				Q_id          = ID,
+				Q_num         = num,
+				about         = f"< {' '.join(Question['about'])} >",
+				Q_txt         = Q_txt,								  
+			)
 
 		def get(ID):
 			#問題の辞書を返す
@@ -332,6 +358,69 @@ class QUESTION:
 			IDS = tuple(iget(0)(i) for i in IDS)
 			if len(IDS)==1:IDS=f"({IDS[0]})"
 			return DB().Table("Question_P_v").Record(f"ID IN {IDS}").fetch(["ID","chara"])
+
+		def to_html(ID,chara):
+			#IDからhtmlの出題形式で出力
+
+			Question = QUESTION.PHRASE.get(ID)
+
+			#問題文の置き換え作業
+			for c,v in Question["A"].items():
+				#問題ﾃﾞｰﾀの問題部以外の置き換え
+				if chara!=c:
+					Question["Q"] = Question["Q"].replace("{"+c+"}",v)
+				#問題部分を整える
+				else:
+					answer = v		
+					width = get_east_asian_width_count(answer)-2
+					if width < 2:width=2
+					long = "__"*(width//2)
+					Question["Q"] = Question["Q"].replace("{"+chara+"}",f"[{long}]")
+
+			#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
+			tags_html="\n\ntag:"
+			for tagname in Question["tag"]:
+				link = url_for('tagchange',word = tagname,link="infiniteQ_Phrase")
+				tags_html += f"""<a class="tag" href="{link}"> {tagname} </a>"""
+
+			#ﾉｰﾄからの引用をできるように・・・
+			md = markdown.Markdown(extensions=["fenced_code","tables"])
+			for name in re.findall(r"{(.*?)}", Question["C"]):
+				q=dedent(
+				f"""
+				SELECT id 
+				FROM note
+				WHERE name = "{name}"
+				""")
+
+				with DB().connect as d:
+					conn,cur = d
+					res = cur.execute(q)
+					NID = res.fetchone()
+
+				if ID!=None:
+					NID=NID[0]
+					data = NOTE.get(NID)
+					content = md.convert(data["content"])
+
+					Question["C"] = Question["C"].replace("{"+name+"}\n","{"+name+"}")
+
+					content = Question["C"].replace(
+						"{"+name+"}",
+						f"<div class='quote'>{content}</div>",
+					).strip()
+					Question["C"] = content
+
+			return render_template(
+							'parts/QSET_Phrase.html',
+							to_edit   = url_for("edit.phrase",ID=ID),
+							about     = f"< {' '.join( Question['about']) } >",
+							Q         = Question["Q"],
+							A         = "答："+answer,
+							C         = Question["C"]+tags_html,
+							Q_id      = ID,
+							abc       = f"'{chara}'"
+							)	
 
 		def get(ID):
 			#問題の辞書を返す

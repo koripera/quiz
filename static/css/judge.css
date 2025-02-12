@@ -1,10 +1,10 @@
-.about{
+.QSET_Judge .about{
 	color:gray;
 	font-size: 80%;
 	padding:0px 15px;
 }
 
-.Question{
+.QSET_Judge .Question{
 	background: #ffffff;
 	word-break: break-all ;
 	border-left: #fceff2 solid 10px;
@@ -14,31 +14,31 @@
 	white-space: pre-wrap;
 }
 
-.answer{display: inline-block;}
+.QSET_Judge .answer{display: inline-block;}
 
-.input{position: relative;}
+.QSET_Judge .input{position: relative;}
 
-.item1{text-align: center;}
+.QSET_Judge .item1{text-align: center;}
 
-.item2{
+.QSET_Judge .item2{
 	position: absolute;
 	top: 50%;
 	right: 0;
 	transform: translateY(-50%);
 }
 
-.result1{
+.QSET_Judge .result1{
 	white-space: pre-wrap;
 	text-align: center;
 }
 
-.result2{
+.QSET_Judge .result2{
 	white-space : pre-wrap;
 	text-align : center;
 	font-size : 16px;
 }
 
-.Comment{
+.QSET_Judge .Comment{
 	white-space : pre-wrap;
 	padding: 15px;
 }
@@ -51,11 +51,5 @@
 	width : 100%;
 	min-height: 0px;
 }
-
-.headlinks hr {
-    width: 100%;
-}
-
-
 
 

@@ -50,40 +50,7 @@ def func():
 			#IDをﾗﾝﾀﾞﾑに選択ID=(ID,chara)
 			data = random.choice(all_ID)
 
-		#出題するIDと文字
-		ID,chara=data
-
-		Question = QUESTION.PHRASE.get(ID)
-
-		#問題文の置き換え作業
-		for c,v in Question["A"].items():
-			#問題ﾃﾞｰﾀの問題部以外の置き換え
-			if chara!=c:
-				Question["Q"] = Question["Q"].replace("{"+c+"}",v)
-			#問題部分を整える
-			else:
-				answer = v		
-				width = get_east_asian_width_count(answer)-2
-				if width < 2:width=2
-				long = "__"*(width//2)
-				Question["Q"] = Question["Q"].replace("{"+chara+"}",f"[{long}]")
-
-		#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
-		tags_html="\n\ntag:"
-		for tagname in Question["tag"]:
-			link = url_for('tagchange',word = tagname,link="infiniteQ_Phrase")
-			tags_html += f"""<a class="tag" href="{link}"> {tagname} </a>"""
-
-
-		QSET10 += render_template(
-						'parts/QSET_Phrase.html',
-						to_edit   = url_for("edit.phrase",ID=ID),
-						about     = f"< {' '.join( Question['about']) } >",
-						Q         = Question["Q"],
-						A         = "答："+answer,
-						C         = Question["C"]+tags_html,
-						Q_id      = ID,
-						abc       = f"'{chara}'"
-						)		
+		#
+		QSET10 += QUESTION.PHRASE.to_html(*data)
 
 	return QSET10
