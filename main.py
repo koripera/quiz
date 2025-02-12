@@ -37,7 +37,7 @@ def main():
 		ip = None
 
 	#入力でﾎｽﾄを選択
-	app.run(port=8000 ,debug=True);exit()
+	#app.run(port=8000 ,debug=True);exit()
 	while True:
 		val = input("y:local  n:open:")
 
