@@ -50,7 +50,11 @@ def main():
 		elif val=="n":
 			clear()
 			print(f"http://{ip}:8000/home")
-			serve(app,host=ip,port=8000,threads=100)
+			try:
+				serve(app,host=ip,port=8000,threads=100)
+			except OSError:
+				print("disconnected")
+				exit()
 			break
 
 if 0:
