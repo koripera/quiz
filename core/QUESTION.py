@@ -404,7 +404,7 @@ class QUESTION:
 					content = md.convert(data["content"])
 
 					Question["C"] = Question["C"].replace("{"+name+"}\n","{"+name+"}")
-					Question["C"] = re.sub("\n*?\{", lambda _: "{", Question["C"])
+					Question["C"] = re.sub("\n*?{", lambda _: "{", Question["C"])
 
 					content =dedent(
 					f"""

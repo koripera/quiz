@@ -83,7 +83,7 @@ def func():
 			content = md.convert(data["content"])
 
 			ret["Comment"] = ret["Comment"].replace("}\n","}")
-			ret["Comment"] = re.sub("\n*?\{", lambda _: "{", ret["Comment"])
+			ret["Comment"] = re.sub("\n*?{", lambda _: "{", ret["Comment"])
 
 			content =dedent(
 			f"""
