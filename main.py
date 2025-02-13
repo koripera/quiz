@@ -37,20 +37,20 @@ def main():
 		ip = None
 
 	#入力でﾎｽﾄを選択
-	#app.run(port=8000 ,debug=True);exit()
+	app.run(port=8000 ,debug=True);exit()
 	while True:
 		val = input("y:local  n:open:")
 
 		if val=="y":
 			clear()
 			print("http://localhost:8000/home")
-			serve(app,host="127.0.0.1",port=8000)
+			serve(app,host="127.0.0.1",port=8000,threads=100)
 			break
 
 		elif val=="n":
 			clear()
 			print(f"http://{ip}:8000/home")
-			serve(app,host=ip,port=8000)
+			serve(app,host=ip,port=8000,threads=100)
 			break
 
 if 0:

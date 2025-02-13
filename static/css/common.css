@@ -12,6 +12,8 @@ textarea{
 	width: 100%;
 }
 
+
+
 /*ｳｲﾝﾄﾞｳ幅が700px以下で適用*/
 @media screen and (max-width: 700px) {
 
@@ -65,26 +67,50 @@ a.tag{
 
 div.quote{
 border-left: 4px solid #888;
-color:#555;
-font-size:90%;
 white-space: normal;
 margin:0;
 padding:0;
 }
 
-div.quote > #text{
+div.quote_content{
+padding:0 1em;
+font-size:0.9em;
+color:#555;
+}
+
+div.quote details summary{
+display: block;
+list-style: none;
+padding:0;
+background-color : #888;
+color:white;
+font-size:;
+}
+
+div.quote details{
+margin:0;
+white-space:normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-size: 1.1em;
+margin-top    :1em;
+margin-bottom :0.3em;
+}
+
+div.quote #text{
 margin:0;
 }
 
-div.quote > p{
+div.quote p{
 margin:0;
 }
 
-div.quote > ul{
+div.quote ul{
 margin:0;
 }
 
-div.quote > li{
+div.quote li{
 padding-top:0;
 padding-bottom:0;
 }

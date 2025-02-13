@@ -404,12 +404,22 @@ class QUESTION:
 					content = md.convert(data["content"])
 
 					Question["C"] = Question["C"].replace("{"+name+"}\n","{"+name+"}")
+					Question["C"] = re.sub("\n*?\{", lambda _: "{", Question["C"])
 
-					content = Question["C"].replace(
+					content =dedent(
+					f"""
+					<div class='quote'>
+					<details open>
+					<summary>{name}</summary>
+					<div class='quote_content'>{content}</div>	
+					</details>
+					</div>
+					""")
+
+					Question["C"] = Question["C"].replace(
 						"{"+name+"}",
-						f"<div class='quote'>{content}</div>",
+						content,
 					).strip()
-					Question["C"] = content
 
 			return render_template(
 							'parts/QSET_Phrase.html',

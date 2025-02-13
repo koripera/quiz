@@ -83,10 +83,21 @@ def func():
 			content = md.convert(data["content"])
 
 			ret["Comment"] = ret["Comment"].replace("}\n","}")
+			ret["Comment"] = re.sub("\n*?\{", lambda _: "{", ret["Comment"])
+
+			content =dedent(
+			f"""
+			<div class='quote'>
+			<details open>
+			<summary>{name}</summary>
+			<div class='quote_content'>{content}</div>	
+			</details>
+			</div>
+			""")
 
 			content = ret["Comment"].replace(
 				"{"+name+"}",
-				f"<div class='quote'>{content}</div>",
+				content,
 			).strip()
 			ret["Comment"] = content
 
