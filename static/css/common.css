@@ -72,6 +72,14 @@ margin:0;
 padding:0;
 }
 
+div.view{
+/*background-color:#FFF;*/
+padding:0 1em;
+padding-bottom:1em;
+margin-bottom: 1em;
+border:1px solid #888;
+}
+
 div.quote_content{
 padding:0 1em;
 font-size:0.9em;
@@ -94,25 +102,32 @@ white-space:normal;
 
 h1, h2, h3, h4, h5, h6 {
 font-size: 1.1em;
-margin-top    :1em;
 margin-bottom :0.3em;
+margin-top:0.8em;
 }
 
+div.view #text,
 div.quote #text{
 margin:0;
 }
 
+div.view p,
 div.quote p{
 margin:0;
 }
 
+div.view ul,
 div.quote ul{
-margin:0;
+margin:0.5em 0;
+padding;0;
+padding-left:30px;
 }
 
+div.view li,
 div.quote li{
 padding-top:0;
 padding-bottom:0;
+padding-left:0;
 }
 
 table{

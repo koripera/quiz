@@ -12,7 +12,9 @@
 {%- endblock %}
 
 {% block body -%}
+	<div class="view">
 	{{body|safe}}
+	</div>
 	<details>
 		<summary>edit</summary>
 		<form method="POST" action="">
