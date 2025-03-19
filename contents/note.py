@@ -24,26 +24,24 @@ def func():
 	if "inQ" not in session:session["inQ"]=""
 	if "inC" not in session:session["inC"]=""
 	if "tag" not in session:session["tag"]=[]
+	
+	if False:
+		idlist = [e[0] for e in NOTE.valid_id(tag=session["tag"])]
 
-	idlist = [e[0] for e in NOTE.valid_id(tag=session["tag"])]
+		links=""
+		for ID in idlist:
+			data = NOTE.get(ID)
+			url = url_for("edit.note",ID=ID)
+			links += f"""<li><a href="{url}">{data["name"]}</a></li>\n"""
 
-	links=""
-	for ID in idlist:
-		data = NOTE.get(ID)
-		url = url_for("edit.note",ID=ID)
-		links += f"""<li><a href="{url}">{data["name"]}</a></li>\n"""
+		links = f"<ul>{links}</ul>"
 
-	links = f"<ul>{links}</ul>"
-
-	if not idlist:
-		links = "No relevant data"
-
+		if not idlist:
+			links = "No relevant data"
+		
 	return render_template(
 		"note.html",
-		body = links,
 		tag=" ".join(session["tag"]),
-		inQ=session["inQ"],
-		inC=session["inC"],
 	)
 
 

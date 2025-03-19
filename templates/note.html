@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 
 {% block head -%}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/phrase.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/note.css')}}">
 {%- endblock %}
 
 {% block body -%}
-	{{body|safe}}
+
+    <div class="search-container">
+        <input type="text" id="search1" placeholder="タグ" value="{{tag}}">
+        <input type="text" id="search2" placeholder="内容">
+        <button onclick="search()">__検索__</button>
+	</div>
+
+	<div id="result"></div>
 
 	<div style="
 	width : 100%;
@@ -14,20 +21,7 @@
 	>
 	</div>
 
-	<div id="change">
-		<details><summary></summary>	
-			<form style="text-align:center" method="POST" action="set_search/N">
-				タグ</br>
-				<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
-
-				問題文</br>
-				<input type="text" name="inQ" value="{{inQ}}" autocomplete="off"></br>
-
-				解説文</br>
-				<input type="text" name="inC" value="{{inC}}" autocomplete="off"></br>
-
-				<input type="submit" name="update" value="　　更新　　"  />
-			</form>
-		</details>
-	</div>
+	<script src="{{url_for('static',filename='js/note.js')}}"></script>
 {%- endblock %}
+
+	{{body|safe}}
