@@ -1,7 +1,8 @@
 body{
-background-color: #bbbbbb;
-width:96vw;
+background-color: #999;
+width:(100%-10px);
 font-family : "monospace";
+overflow-x:hidden;
 }
 
 input[type="text"]{
@@ -32,11 +33,16 @@ textarea{
 
 }
 
+img{
+	background-color :rgba(255 255 255 / 40%);
+	border-radius    : 0.5rem;
+}
+
 .head{
 	position: fixed;
 	top:0;
 	left: 0;
-	background: #bbbbbb;
+	background:#999;
 	width : 100%;
 	z-index:2;
 }
@@ -59,10 +65,10 @@ a.tag{
 	margin           : 0.25rem;
 	text-decoration  : none;
 	border-radius    : 0.5rem;
-	border           : solid;
+	/*border           : solid;*/
 	border-color     : #888888;
 	color            : black;
-	background-color : #bbbbbb;
+	background-color :rgba(255 255 255 / 40%);
 }
 
 div.quote{
@@ -73,11 +79,12 @@ padding:0;
 }
 
 div.view{
-/*background-color:#FFF;*/
-padding:0 1em;
+background-color :rgba(255 255 255 / 40%);
+border-radius    : 0.5rem;
+padding:1em 1em;
 padding-bottom:1em;
 margin-bottom: 1em;
-border:1px solid #888;
+/*border:1px solid #888;*/
 }
 
 div.quote_content{

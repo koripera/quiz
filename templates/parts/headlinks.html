@@ -5,6 +5,8 @@
 				<a href="{{url_for('infiniteQ_Judge')}}">　正誤問題　</a>
 				<a href="{{url_for('infiniteQ_Phrase')}}">　短答問題　</a>
 				<a href="{{url_for('note')}}">　ノート　</a>
+				<a href="{{url_for('judge')}}">　正誤　</a>
+
 			</div>
 			<div class="right-links">
 				{% if 'username' not in session -%}
@@ -14,7 +16,6 @@
 				{%- endif %}
 			</div>
 		</div>
-		<hr>
 	</div>
 
 	<div style="

@@ -7,9 +7,9 @@
 __all__ = ["args","func"]
 
 args={
-"rule"                      : "/note",
+"rule"                      : "/judge",
 "methods"                   : ["GET"],
-"endpoint"                  : "note",
+"endpoint"                  : "judge",
 #"strict_slashes"            : ,
 #"provide_automatic_options" : ,
 #"defaults"                  : ,
@@ -18,7 +18,6 @@ args={
 
 from flask import render_template,session,request,redirect,url_for
 import contents.__parts as parts
-from core.NOTE import NOTE
 
 def func():
 	if "inQ" not in session:session["inQ"]=""
@@ -26,8 +25,10 @@ def func():
 	if "tag" not in session:session["tag"]=[]
 	
 	return render_template(
-		"note.html",
-		tag=" ".join(session["tag"]),
+		"judge.html",
+		tag = " ".join(session["tag"]),
+		Q   = session["inQ"], 
+		C   = session["inC"],
 	)
 
 
