@@ -11,6 +11,7 @@ input[type="text"]{
 
 textarea{
 	width: 100%;
+	tab-size: 4;
 }
 
 

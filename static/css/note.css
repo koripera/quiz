@@ -29,6 +29,23 @@ a.links_x{
 	margin-top:1rem;
 	margin-bottom:1rem;
 }
+
+summary {
+display: block;
+padding: 2px;
+padding-left:15px;
+border-radius: 10px;
+text-decoration: none;
+font-weight: bold; 
+color: darkblue;
+outline: none;
+user-select:none;
+}
+
+.inner_details {
+padding-left: 1em;
+}
+
 #change{
 	position: fixed;
 	bottom:0;

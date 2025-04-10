@@ -11,8 +11,19 @@
         <input type="text" id="search2" placeholder="内容">
         <button onclick="search()">__検索__</button>
 	</div>
+	
+	<details>
+	<summary>設定</summary>
+	<div class="search-container">
+        <textarea id="category" rows="10">{{category}}</textarea>
+        <button onclick="set()">__設定__</button>
+	</div>
+	</details>
+	<hr>
+
 
 	<div id="result"></div>
+	<div id="result2"></div>
 
 	<div style="
 	width : 100%;
