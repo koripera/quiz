@@ -1,6 +1,6 @@
 /*入力欄全体*/
 .inputJ {
-  background:#fff1;
+  /*background:#fff1;*/
   border-radius:1em;
   padding: 1rem 0;
 }
@@ -8,11 +8,17 @@
 /*項目のキャプション*/
 .inputJ label{
   user-select:none;
-  font-size:0.5em;
+  font-size:0.8em;
 }
 
+.inputJ p{
+  user-select:none;
+  font-size:0.8em;
+}
+
+
 .inputJ label:focus-within {
-  font-size:0.5em;
+  font-size:0.8em;
 }
 
 /*入力要素の1セット*/
@@ -58,8 +64,17 @@
 /*操作関係のボタン*/
 .inputJ #command{
   text-align: center;
-  background:#fff1;
+  /*background:#fff1;*/
   border-radius:1em;
+}
+
+.inputJ fieldset{
+  border:none;
+  outline: none;
+}
+
+.inputJ legend{
+  font-size:0.5em;
 }
 
 /*答えの入力欄*/

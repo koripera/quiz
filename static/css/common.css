@@ -1,12 +1,22 @@
+@media screen and (max-width: 700px) {
+body{
+	font-size   : 10px;
+}
+
+input[type="text"]{
+	font-size:10px;
+}
+
+textarea{
+	font-size:10px;
+}
+}
+
 body{
 background-color: #999;
 font-family : "monospace";
 overflow-x:hidden;
 }
-
-
-
-
 
 img{
 	background-color :rgba(255 255 255 / 40%);

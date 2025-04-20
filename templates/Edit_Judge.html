@@ -1,75 +1,62 @@
 {% extends "base.html" %}
 
 {% block head -%}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/inputJ.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/inputJ.css')}}">
 {%- endblock %}
 
 {% block body -%}
 <div class="inputJ">
-	<form method="POST" action="">
-		<div class="input_text">
-			<label>
-				about
-				<input type="text" class="line" name="about" value="{{about}}" autocomplete="off">
-			</label>
-		</div>
+  <form method="POST" action="">
+    <div class="input_text">
+    <p>about</p>
+      <input type="text" class="line" name="about" value="{{about}}" autocomplete="off">
+    </div>
 
-		<div class="input_text">
-			<label>
-				ﾀｲﾄﾙ
-				<input type="text" class="line" name="title" value="{{title}}" autocomplete="off">
-			</label>
-		</div>
+    <div class="input_text">
+      <p>ﾀｲﾄﾙ</p>
+      <input type="text" class="line" name="title" value="{{title}}" autocomplete="off">
+    </div>
 
-		<div class="input_text">
-			<label>
-				ﾀｸﾞ
-				<input type="text" class="line" name="tag" value="{{tag}}" autocomplete="off">
-			</label>
-		</div>
+    <div class="input_text">
+      <p>ﾀｸﾞ</p>
+      <input type="text" class="line" name="tag" value="{{tag}}" autocomplete="off">
+    </div>
 
+    <div class="input_text">
+      <p>問題文</p>
+      <textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
+    </div>
 
-		<div class="input_text">
-			<label>
-				問題文
-				<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
-			</label>
-		</div>
+    <div class="input_text">
+      <p>答え</p>
+      <div id="ans">
+        {% for e in ans %}
+          <div class="bool-box">
+            <label>
+              <input type="hidden" name="ans[]" value="{{e[1]}}">
+              <input type="checkbox" name="_" class="toggle" {% if e[1]=="o" %}checked{% endif %}>
+              <span class="display"></span>
+            </label>
+            <input type="text" name="text[]" value="{{e[0]}}" autocomplete="off"/>
+            <input class="close" type="button" value="X"></input>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 
-		<div class="input_text">
-			<label id>
-			答え
-			<div id="ans">
-				{% for e in ans %}
-					<div class="bool-box">
-					  <label>
-					  <input type="hidden" name="ans[]" value="{{e[1]}}">
-					  <input type="checkbox" name="_" class="toggle" {% if e[1]=="o" %}checked{% endif %}>
-					  <span class="display"></span>
-					  </label>
-					  <input type="text" name="text[]" value="{{e[0]}}" autocomplete="off"/>
-					  <input class="close" type="button" value="X"></input>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
+    <input type="button" value="＋" id="add"></input>
 
+    <div class="input_text">
+      <p>解説</p>
+      <textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
+    </div>
 
-		<input type="button" value="＋" id="add"></input>
-
-		<div class="input_text">
-			<label>
-				解説
-				<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
-			</label>
-		</div>
-
-		<div id="command">
-			<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
-		</div>
-	</form>
+    <div id="command">
+      <input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+  </form>
 
 </div>
 
@@ -78,15 +65,15 @@
 
 
 <template id="tmp_answer">
-	<div class="bool-box">
-	  <label>
-	  <input type="hidden" name="ans[]" value="x">
-	  <input type="checkbox" name="_" class="toggle">
-	  <span class="display"></span>
-	  </label>
-	  <input type="text" name="text[]" value="" autocomplete="off"/>
-	  <input class="close" type="button" value="X"></input>
-	</div>
+  <div class="bool-box">
+    <label>
+      <input type="hidden" name="ans[]" value="x">
+      <input type="checkbox" name="_" class="toggle">
+      <span class="display"></span>
+    </label>
+    <input type="text" name="text[]" value="" autocomplete="off"/>
+    <input class="close" type="button" value="X"></input>
+  </div>
 </template>
 
 <script>
