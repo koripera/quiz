@@ -45,7 +45,6 @@ def Edit_J_get(ID):
 
 		#該当IDがなければ、404ｴﾗｰ
 		if Question==None:return "nopage",404		
-
 		
 		result_html = render_template(
 			'Edit_Judge.html',
@@ -54,8 +53,7 @@ def Edit_J_get(ID):
 			title     = Question["name"],
 			tag       = ",".join(Question["tag"]),
 			Q         = Question["Q"],
-			candidate = "\n".join([c for c,a in Question["A"]]),
-			A         = "\n".join([a for c,a in Question["A"]]),
+			ans       = Question["A"],
 			comment   = Question["C"],
 		)
 

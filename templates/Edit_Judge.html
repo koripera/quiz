@@ -1,83 +1,133 @@
 {% extends "base.html" %}
 
 {% block head -%}
-	<style>
-
-	body{
-	background-color: #bbbbbb;
-	width:96vw;
-	}
-
-	#answer1{text-align: center;}
-
-	table {
-	  border-collapse: collapse;
-	}
-	th, td {
-	  border: solid 1px #333; /* 線の種類 太さ 色 */
-	  text-align:right;
-	}
-
-	.headlink{
-	margin-right : 20px;
-	}
-
-	input[type="text"]{
-	width: 95%;
-	}
-
-	textarea{
-	width: 95%;
-	}
-
-	#command{
-	text-align:center;
-	}
-	</style>
-
+	<link rel="stylesheet" href="{{url_for('static', filename='css/inputJ.css')}}">
 {%- endblock %}
 
 {% block body -%}
+<div class="inputJ">
 	<form method="POST" action="">
+		<div class="input_text">
+			<label>
+				about
+				<input type="text" class="line" name="about" value="{{about}}" autocomplete="off">
+			</label>
+		</div>
 
-		about</br>
-		<input type="text" name="about" value="{{about}}" autocomplete="off"></br>
-		</br>
+		<div class="input_text">
+			<label>
+				ﾀｲﾄﾙ
+				<input type="text" class="line" name="title" value="{{title}}" autocomplete="off">
+			</label>
+		</div>
 
-		ﾀｲﾄﾙ</br>
-		<input type="text" name="title" value="{{title}}" autocomplete="off"></br>
-		</br>
-
-		ﾀｸﾞ</br>
-		<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
-		</br>
-
-		問題文</br>
-		<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
-		</br>
-
-		候補</br>
-		<textarea name="candidate" cols="64" rows="10">{{candidate}}</textarea>
-		</br>
-
-		答え</br>
-		<textarea name="A" cols="64" rows="10">{{A}}</textarea>
-		</br>
-
-		解説</br>
-		<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
-		</br>
-		</br>
-		</br>
-		<div id="command">
-		<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="input_text">
+			<label>
+				ﾀｸﾞ
+				<input type="text" class="line" name="tag" value="{{tag}}" autocomplete="off">
+			</label>
 		</div>
 
 
+		<div class="input_text">
+			<label>
+				問題文
+				<textarea name="Q" cols="64" rows="20">{{Q}}</textarea>
+			</label>
+		</div>
+
+		<div class="input_text">
+			<label id>
+			答え
+			<div id="ans">
+				{% for e in ans %}
+					<div class="bool-box">
+					  <label>
+					  <input type="hidden" name="ans[]" value="{{e[1]}}">
+					  <input type="checkbox" name="_" class="toggle" {% if e[1]=="o" %}checked{% endif %}>
+					  <span class="display"></span>
+					  </label>
+					  <input type="text" name="text[]" value="{{e[0]}}" autocomplete="off"/>
+					  <input class="close" type="button" value="X"></input>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+
+		<input type="button" value="＋" id="add"></input>
+
+		<div class="input_text">
+			<label>
+				解説
+				<textarea name="comment" cols="64" rows="20">{{comment}}</textarea>
+			</label>
+		</div>
+
+		<div id="command">
+			<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
 	</form>
 
-	<div style="width : 100%;height: 500px;">
+</div>
+
+<div style="width : 100%;height: 500px;">
+</div>
+
+
+<template id="tmp_answer">
+	<div class="bool-box">
+	  <label>
+	  <input type="hidden" name="ans[]" value="x">
+	  <input type="checkbox" name="_" class="toggle">
+	  <span class="display"></span>
+	  </label>
+	  <input type="text" name="text[]" value="" autocomplete="off"/>
+	  <input class="close" type="button" value="X"></input>
 	</div>
+</template>
+
+<script>
+
+//要素の追加
+let button = document.getElementById("add");
+button.addEventListener("click",add_ans);
+
+//要素の削除
+function add_ans() {
+  const area = document.querySelector("#ans");
+  const tmp  = document.querySelector("#tmp_answer");
+  const clone = tmp.content.cloneNode(true);
+  area.appendChild(clone);
+}
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("close")) {
+    const inputTextBlock = e.target.closest(".bool-box");
+    if (inputTextBlock) {
+      inputTextBlock.remove();
+    }
+  }
+});
+
+/*値の変更*/
+document.addEventListener("change", function (e) {
+  if (e.target.matches(".toggle")) {
+    const checkbox = e.target;
+    const hidden = checkbox.previousElementSibling;
+
+    if (checkbox.checked) {
+      hidden.value = "o";
+    } else {
+      hidden.value = "x";
+    }
+  }
+});
+
+</script>
+
+
+
 {%- endblock %}

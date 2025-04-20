@@ -166,8 +166,12 @@ class QUESTION:
 			Question = QUESTION.JUDGE.get(ID)
 
 			#問題ﾃﾞｰﾀの一部の置き換え
-			num = random.randrange(len(Question["A"]))
-			Q_txt = Question["Q"].replace("{x}",Question["A"][num][0])
+			if len(Question["A"]):
+				num = random.randrange(len(Question["A"]))
+				Q_txt = Question["Q"].replace("{x}",Question["A"][num][0])
+			else:
+				num = None#表示はされる、jsのエラーでcheck_jには伝わらない
+				Q_txt = Question["Q"]
 
 			#ID,部分変換のindex,問題文等をHTMLに記入
 			return render_template(
@@ -212,8 +216,10 @@ class QUESTION:
 			common.update({"IDlist_J":pickle.dumps(IDlist)})
 
 			#挿入ﾃﾞｰﾀの作成し、入力をﾃﾞｰﾀﾍﾞｰｽに入れる
-			candidate = request.form.get("candidate").replace('\r\n','\n').strip().split("\n")
-			A         = request.form.get("A").replace('\r\n','\n').strip().split("\n")
+			#candidate = request.form.get("candidate").replace('\r\n','\n').strip().split("\n")
+			#A         = request.form.get("A").replace('\r\n','\n').strip().split("\n")
+			A         = request.form.getlist("ans[]")
+			candidate = request.form.getlist("text[]")
 
 			insdata={
 				"ID"    : ID,
@@ -242,8 +248,11 @@ class QUESTION:
 			ID = int(ID)
 
 			#挿入ﾃﾞｰﾀを作成し、入力をﾃﾞｰﾀﾍﾞｰｽに入れる
-			candidate = request.form.get("candidate").replace('\r\n','\n').strip().split("\n")
-			A         = request.form.get("A").replace('\r\n','\n').strip().split("\n")
+			#candidate = request.form.get("candidate").replace('\r\n','\n').strip().split("\n")
+			#A         = request.form.get("A").replace('\r\n','\n').strip().split("\n")
+			A         = request.form.getlist("ans[]")
+			candidate = request.form.getlist("text[]")
+
 
 			insdata={
 				"ID"    : ID,
