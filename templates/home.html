@@ -2,7 +2,34 @@
 
 {% block head %}
 	<style>
-	img { width: 100%; height: auto; }
+		img { width: 100%; height: auto; }
+		#taglist{
+			display:flex;
+			box-sizing: border-box;
+			flex-direction:column;
+			gap:10px;
+			width:100%;
+			padding:10px;
+		}
+		a.tag-progress{
+			width            : 100%;
+			box-sizing       : border-box;
+			display          : block;
+			padding          : 0.05rem 1rem;
+			/*margin           : 1rem 10rem;*/
+			
+			text-decoration  : none;
+			border-radius    : 0.5rem;
+			/*border           : solid;*/
+			border-color     : #888888;
+			color            : black;
+			/*background-color :rgba(255 255 255 / 40%);*/
+			background: linear-gradient(
+			  	to right,
+				#2196f3 var(--percent),
+				#ccc var(--percent)
+			);
+		}
 	</style>
 {% endblock %}
 
@@ -10,7 +37,9 @@
 	<h2>回答数</h2><img src="{{ graph }}" alt="Matplotlib Plot">
 	<h2>正答率</h2><img src="{{ graph2 }}" alt="Matplotlib Plot">
 	<h2>タグ</h2>
+    <div id="taglist">
 	{{ taglink|safe }}
+	</div>
 
 	<div style="
 	width : 100%;
