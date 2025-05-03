@@ -24,10 +24,32 @@ matplotlib.use('Agg')  # GUIバックエンドを使わない設定
 import io
 import base64
 
+from core.QUESTION import QUESTION
+from core.SCORE import SCORE
+
 from libs.DATABASE import DB
 import contents.__parts as parts
 
+import random
+
 def func():
+	#回答率・正答率のグラフの作成
+	graph_url,graph_url2=make_pic()
+
+	#達成度を示すタグのリンク
+	tag=taglink()
+
+	# 画像データをHTMLに埋め込む
+	page = render_template(
+		'home.html',
+		graph       = 'data:image/png;base64,{}'.format(graph_url),
+		graph2      = 'data:image/png;base64,{}'.format(graph_url2),
+		taglink     = tag,
+	)
+
+	return page
+
+def make_pic():
 	#過去60日の日付の取得
 	today = datetime.now()
 	dates = list(reversed([(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(60)]))
@@ -39,7 +61,7 @@ def func():
 	highest=100 #表の上限値、最低100、100超えたらその値
 
 	#検索するﾕｰｻﾞ
-	username = session["username"] if "username" in session else ""
+	username = session.get("username","")
 
 	with DB().connect as d:
 		conn,cur = d
@@ -134,28 +156,57 @@ def func():
 	img2.seek(0)
 	graph_url2 = base64.b64encode(img2.getvalue()).decode()
 
+	matplotlib.pyplot.close()
+
+	return graph_url,graph_url2
+
+def taglink():
 	#tagを設定するリンクを作る
 	#ﾀｸﾞ名のﾘｽﾄを取得する
+	username = session.get("username","")
 	names = DB().Table("tag").Record().fetch("name")
-	tmp = ""	
+	tmp = ""
+
+	#一時ﾃｰﾌﾞﾙを作る
+	with DB().connect as d:
+		conn,cur = d		
+		cur.execute(f'''
+			CREATE TEMPORARY TABLE temp AS
+			SELECT * FROM per_user WHERE user = '{username}'
+		''')
 
 	#各ﾀｸﾞに変更するﾘﾝｸを作成する
 	for e in names:
-		#print(e)
 		a = url_for('tagchange',word = e[0],link="infiniteQ_Judge")
-		#print(a)
-		tmp+=f"""<a class="tag" href="{a}"> {e[0]} </a>"""	
 
-	# 画像データをHTMLに埋め込む
-	page = render_template(
-		'home.html',
-		graph       = 'data:image/png;base64,{}'.format(graph_url),
-		graph2      = 'data:image/png;base64,{}'.format(graph_url2),
-		taglink     = tmp,
-	)
+		#達成率を表す値をいれる
+		if username!="":
+			#tag付きの問題を取る
+			ids = QUESTION.JUDGE.valid_id(tag=[e[0]])
+			ids = [e[0] for e in ids]
 
-	matplotlib.pyplot.close()
+			placeholders = ','.join(['?'] * len(ids))
+			query = f"SELECT rate FROM temp WHERE id IN ({placeholders})"
+			with DB().connect as d:
+				conn,cur = d
+				cur.execute(f'''
+				CREATE TEMPORARY TABLE temp AS
+				SELECT * FROM per_user WHERE user = '{username}'
+				''')
 
-	return page
+				cur.execute(query,ids)
+				rows = cur.fetchall()
 
+			values = [row[0] for row in rows if row[0] is not None]
 
+			if len(ids):
+				v=int((sum(values)/len(ids))*100)
+			else:
+				v=0
+
+		else:
+			v=0
+
+		tmp+=f"""<a class="tag-progress" href="{a}" style="--percent: {v}%;order:{v}"> {e[0]} </a>\n"""
+	
+	return tmp

@@ -49,6 +49,7 @@ def func():
 	A      = "〇を押しました" if answer else "×を押しました"
 	result = "<font color='red'>正解</font>" if ans==answer else "<font color='blue'>不正解</font>"
 
+
 	#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
 	tags_html=""
 	for tagname in Qdata["tag"]:
@@ -61,9 +62,49 @@ def func():
 		"Comment" : f"{Qdata['C']}\n\ntag:{tags_html}"
 	}
 
-	#ﾉｰﾄからの引用をできるように・・・
+	ret["Comment"] = replace_comment(ret["Comment"])
+
+	#回答を記録
+	if "username" in session:
+		SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
+		ret["logg"] = "".join(["〇" if e else "×" for e in SCORE.result(session['username'],QID,None)])
+
+	else:
+		ret["logg"] = ""
+
+	#問題ごとの正答率(直近10)を記録する
+	update_rate(QID)
+
+
+	return ret
+
+def update_rate(ID):
+	#問題ごとの正答率の作成
+	user = session.get("username","")
+	if user!="":
+		d=DB().Table("per_user").Record(f"ID={ID} AND Mode='judge'")
+		a = d.fetchone()
+
+		rate=SCORE.result(user,ID,None)[-10:].count(1)/10
+		if a==None:
+			DB().Table("per_user").add_record({
+				"User" :user,
+				"Mode" :"judge",
+				"ID"   :ID,
+				"Chara":"",
+				"rate" :rate,
+			})
+		else:
+			d.update({
+				"rate":rate,
+			})
+
+def replace_comment(txt):
+	#ﾉｰﾄからtxt
 	md = markdown.Markdown(extensions=["fenced_code","tables"])
-	for name in re.findall(r"{(.*?)}", ret["Comment"]):
+
+	#ﾉｰﾄを検索
+	for name in re.findall(r"{(.*?)}", txt):
 		q=dedent(
 		f"""
 		SELECT id 
@@ -71,19 +112,20 @@ def func():
 		WHERE name = "{name}"
 		""")
 
+		#ﾉｰﾄIDを取得
 		with DB().connect as d:
 			conn,cur = d
 			res = cur.execute(q)
 			ID = res.fetchone()
 
+		#ﾌﾟﾚｰｽﾎﾙﾀﾞの置き換え
 		if ID!=None:
 			ID=ID[0]
-			print(ID,name)
 			data = NOTE.get(ID)
 			content = md.convert(data["content"])
 
-			ret["Comment"] = ret["Comment"].replace("}\n","}")
-			ret["Comment"] = re.sub("\n*?{", lambda _: "{", ret["Comment"])
+			txt = txt.replace("}\n","}")
+			txt = re.sub("\n*?{", lambda _: "{", txt)
 
 			content =dedent(
 			f"""
@@ -95,18 +137,12 @@ def func():
 			</div>
 			""")
 
-			content = ret["Comment"].replace(
+			content = txt.replace(
 				"{"+name+"}",
 				content,
 			).strip()
-			ret["Comment"] = content
+			txt = content
 
-	#回答を記録
-	if "username" in session:
-		SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
-		ret["logg"] = "".join(["〇" if e else "×" for e in SCORE.result(session['username'],QID,None)])
+	return txt
 
-	else:
-		ret["logg"] = ""
-
-	return ret
+			

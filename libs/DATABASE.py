@@ -294,6 +294,11 @@ class RECORD:
 	
 		return rows
 
+	def fetchone(self,column="*"):
+		#fecthのうちひとつ返す:q
+		res = self.fetch(column)
+		return res[0] if res else None
+
 	def update(self,val):
 		#辞書で追加
 		keys = []
