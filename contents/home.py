@@ -63,47 +63,70 @@ def make_pic():
 	#検索するﾕｰｻﾞ
 	username = session.get("username","")
 
-	with DB().connect as d:
-		conn,cur = d
+	for date in dates:
+		res = DB().Table("Dairy").Record(f"user = '{username}' AND date ='{date}'").fetchone("J_ac,J_wa,P_ac,P_wa")
+		
+		if res==None:
+			res=(0,0,0,0)
 
-		#一時ﾃｰﾌﾞﾙを作る
-		cur.execute(f'''
-			CREATE TEMPORARY TABLE temp AS
-			SELECT * FROM Score WHERE user = '{username}' AND datetime >= DATE('now', '-60 days')
-		''')
+		#表の上限値をﾃﾞｰﾀ量で変える
+		if highest < sum(res) : highest = sum(res)
 
-		#正答と誤答のｶｳﾝﾄ
-		for date in dates:
-			cur.execute("""
-				SELECT 	SUM(CASE WHEN mode='Judge' AND result = 1 THEN 1 ELSE 0 END) AS J_ac,
-						SUM(CASE WHEN mode='Judge' AND result = 0 THEN 1 ELSE 0 END) AS J_wa,
-					 	SUM(CASE WHEN mode='Phrase' AND result = 1 THEN 1 ELSE 0 END) AS P_ac,
-						SUM(CASE WHEN mode='Phrase' AND result = 0 THEN 1 ELSE 0 END) AS P_wa
-			FROM temp
-				WHERE datetime BETWEEN ? AND ?;
-			""",(date+" 00:00",date+" 23:59"))
-			res=cur.fetchone()
+		result.append((date,res[0]+res[2],res[1]+res[3]))
 
-			res = list(res)
-			if res[0] == None : res[0]=0 
-			if res[1] == None : res[1]=0
-			if res[2] == None : res[2]=0
-			if res[3] == None : res[3]=0
+		if res[0]+res[1]!=0:
+			result2.append((date,res[0]/(res[0]+res[1])))
+		else:
+			result2.append((date,None))
 
-			#表の上限値をﾃﾞｰﾀ量で変える
-			if highest < sum(res) : highest = sum(res)
+		if res[2]+res[3]!=0:
+			result3.append((date,res[2]/(res[2]+res[3])))
+		else:
+			result3.append((date,None))
 
-			result.append((date,res[0]+res[2],res[1]+res[3]))
+		
+	if False:
+		with DB().connect as d:
+			conn,cur = d
 
-			if res[0]+res[1]!=0:
-				result2.append((date,res[0]/(res[0]+res[1])))
-			else:
-				result2.append((date,None))
+			#一時ﾃｰﾌﾞﾙを作る
+			cur.execute(f'''
+				CREATE TEMPORARY TABLE temp AS
+				SELECT * FROM Score WHERE user = '{username}' AND datetime >= DATE('now', '-60 days')
+			''')
 
-			if res[2]+res[3]!=0:
-				result3.append((date,res[2]/(res[2]+res[3])))
-			else:
-				result3.append((date,None))
+			#正答と誤答のｶｳﾝﾄ
+			for date in dates:
+				cur.execute("""
+					SELECT 	SUM(CASE WHEN mode='Judge' AND result = 1 THEN 1 ELSE 0 END) AS J_ac,
+							SUM(CASE WHEN mode='Judge' AND result = 0 THEN 1 ELSE 0 END) AS J_wa,
+							SUM(CASE WHEN mode='Phrase' AND result = 1 THEN 1 ELSE 0 END) AS P_ac,
+							SUM(CASE WHEN mode='Phrase' AND result = 0 THEN 1 ELSE 0 END) AS P_wa
+				FROM temp
+					WHERE datetime BETWEEN ? AND ?;
+				""",(date+" 00:00",date+" 23:59"))
+				res=cur.fetchone()
+
+				res = list(res)
+				if res[0] == None : res[0]=0 
+				if res[1] == None : res[1]=0
+				if res[2] == None : res[2]=0
+				if res[3] == None : res[3]=0
+
+				#表の上限値をﾃﾞｰﾀ量で変える
+				if highest < sum(res) : highest = sum(res)
+
+				result.append((date,res[0]+res[2],res[1]+res[3]))
+
+				if res[0]+res[1]!=0:
+					result2.append((date,res[0]/(res[0]+res[1])))
+				else:
+					result2.append((date,None))
+
+				if res[2]+res[3]!=0:
+					result3.append((date,res[2]/(res[2]+res[3])))
+				else:
+					result3.append((date,None))
 		
 	#正答緑、誤答ｵﾚﾝｼﾞの積上棒ｸﾞﾗﾌを作成する
 	fig, ax = plt.subplots(figsize=(16, 9))

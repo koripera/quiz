@@ -18,6 +18,8 @@ def init_DB():#DBﾌｧｲﾙがないときの設定を行う
 	tag    = data.add_table("tag"            ,["ID","name"])
 	note   = data.add_table("note"           ,["ID","name","content"])
 	N_tag  = data.add_table("note_tag"       ,["NID","tag_id"])
+	_      = data.add_table("per_user"       ,["user","mode","ID","Chara","rate"])
+	_      = data.add_table("Dairy"          ,["date","user","J_ac","J_wa","P_ac","P_wa"])
 
 	#scoreの日付にｲﾝﾃﾞｯｸｽ
 	with data.connect as d:

@@ -66,38 +66,16 @@ def func():
 
 	#回答を記録
 	if "username" in session:
-		SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
-		ret["logg"] = "".join(["〇" if e else "×" for e in SCORE.result(session['username'],QID,None)])
+		res = SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
+		ret["logg"] = "".join(["〇" if e else "×" for e in res])
 
 	else:
 		ret["logg"] = ""
 
-	#問題ごとの正答率(直近10)を記録する
-	update_rate(QID)
 
 
 	return ret
 
-def update_rate(ID):
-	#問題ごとの正答率の作成
-	user = session.get("username","")
-	if user!="":
-		d=DB().Table("per_user").Record(f"ID={ID} AND Mode='judge'")
-		a = d.fetchone()
-
-		rate=SCORE.result(user,ID,None)[-10:].count(1)/10
-		if a==None:
-			DB().Table("per_user").add_record({
-				"User" :user,
-				"Mode" :"judge",
-				"ID"   :ID,
-				"Chara":"",
-				"rate" :rate,
-			})
-		else:
-			d.update({
-				"rate":rate,
-			})
 
 def replace_comment(txt):
 	#ﾉｰﾄからtxt
