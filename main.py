@@ -73,4 +73,7 @@ if 0:
 		return txt 
 
 if __name__ == '__main__':
-	main()
+    try:
+    	main()
+    except:
+        print("err")

@@ -407,7 +407,7 @@ class QUESTION:
 					res = cur.execute(q)
 					NID = res.fetchone()
 
-				if ID!=None:
+				if NID!=None:
 					NID=NID[0]
 					data = NOTE.get(NID)
 					content = md.convert(data["content"])
