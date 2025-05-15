@@ -9,40 +9,34 @@
 	</style>
 	<link rel="stylesheet" href="{{url_for('static', filename='css/judge.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename='css/phrase.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/noteediter.css')}}">
 {%- endblock %}
 
 {% block body -%}
 	<div class="view">
 	{{body|safe}}
 	</div>
-	<details>
+	<details>		
 		<summary>edit</summary>
+		<div id="noteediter">
 		<form method="POST" action="">
+			ﾀｲﾄﾙ
+			<input class="input_text" type="text" name="title" value="{{title}}" autocomplete="off">
 
-			ﾀｲﾄﾙ</br>
-			<input type="text" name="title" value="{{title}}" autocomplete="off"></br>
-			</br>
+			ﾀｸﾞ
+			<input class="input_text" type="text" name="tag" value="{{tag}}" autocomplete="off">
 
-			ﾀｸﾞ</br>
-			<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
-			</br>
-
-			内容</br>
+			内容
 			<textarea name="content" cols="64" rows="20">{{content}}</textarea>
-			</br>
-			
-			</br>
-			</br>
-			</br>
 
 			<div id="command">
 			<input type="submit" value="　　更新　　" name="update" />&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="submit" value="　新規追加　" name="addnew" />&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="submit" value="　　削除　　" name="delete" />&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-
-
 		</form>
+		</div>
+
 	</details>
 
 	<details open>

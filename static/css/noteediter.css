@@ -1,0 +1,29 @@
+#noteediter .input_text{
+  box-sizing: border-box;
+  width: 100%;
+  border:none;
+
+
+  margin:0rem auto;
+  padding: 0.3rem;
+  display: block;
+  border-radius:0.5em;
+  outline: none;
+  resize: vertical;
+}
+
+#noteediter textarea{
+  box-sizing: border-box;
+  width: 100%;
+  border:none;
+
+
+  min-height: 100px;
+  margin:0.5rem auto;
+  padding: 0.3rem;
+  display: block;
+  border-radius: 0.5em;
+  outline: none;
+  resize: vertical;
+  tab-size:4;
+}
