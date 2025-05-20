@@ -18,6 +18,7 @@
 	position: fixed;
 
 	box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+	width:80%;
 
 	background:#aaa;
 	/*width:100%;*/
@@ -55,11 +56,15 @@
 #change form label{
 display: flex;
 justify-content: space-between;
+/*min-width:;*/
+/*max-width:;*/
+
 gap:1em;
 }
 
 #change input[type="text"]{
-min-width:20em;
+flex: 1;
+min-width: 0
 }
 
 
