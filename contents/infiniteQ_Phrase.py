@@ -29,6 +29,7 @@ def func():
 
 	page = render_template(
 		'infiniteQ_Phrase.html',
+		mode="P",
 		headlinks = parts.headlink(),
 		tag=" ".join(session["tag"]),
 		inQ=session["inQ"],

@@ -27,6 +27,7 @@ def func():
 
 	page = render_template(
 		'infiniteQ_Judge.html',
+		mode="J",
 		headlinks = parts.headlink(),
 		tag=" ".join(session["tag"]),
 		inQ=session["inQ"],

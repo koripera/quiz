@@ -2,6 +2,7 @@
 
 {% block head %}
 	<link rel="stylesheet" href="{{url_for('static', filename='css/judge.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/change.css')}}">
 {% endblock %}
 
 {% block body %}
@@ -16,24 +17,10 @@
 	>
 	</div>
 
-	<div id="change">
-		<details><summary></summary>	
-			<form style="text-align:center" method="POST" action="set_search/J">
-				タグ</br>
-				<input type="text" name="tag" value="{{tag}}" autocomplete="off"></br>
-
-				問題文</br>
-				<input type="text" name="inQ" value="{{inQ}}" autocomplete="off"></br>
-
-				解説文</br>
-				<input type="text" name="inC" value="{{inC}}" autocomplete="off"></br>
-
-				<input type="submit" name="update" value="　　更新　　"  />
-			</form>
-		</details>
-	</div>
+	{% include "parts/search.html" %}
 
 	<script src="{{url_for('static',filename='js/judge.js')}}"></script>
 	<script src="{{url_for('static',filename='js/judge_check.js')}}"></script>
+	<script src="{{url_for('static',filename='js/change.js')}}"></script>
 {% endblock %}
 

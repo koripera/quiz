@@ -1,0 +1,23 @@
+<button id="floatBtn">🔎</button>
+
+<div id="change">
+	<form method="POST" action="set_search/{{mode}}">
+		<label>
+		タグ
+		<input type="text" name="tag" value="{{tag}}" autocomplete="off">
+		</label>
+
+		<label>
+		問題文
+		<input type="text" name="inQ" value="{{inQ}}" autocomplete="off">
+		</label>
+
+		<label>
+		解説文
+		<input type="text" name="inC" value="{{inC}}" autocomplete="off">
+		</label>
+
+
+		<input type="submit" name="update" value="　　更新　　"  />
+	</form>
+</div>
