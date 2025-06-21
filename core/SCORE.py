@@ -41,7 +41,7 @@ class SCORE:
 			select = dedent(
 				f"""
 				SELECT result FROM Score
-				WHERE user = ? AND ID = ?
+				WHERE user = ? AND ID = ? AND chara IS NULL
 				ORDER BY datetime
 				""")
 
