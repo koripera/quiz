@@ -36,7 +36,7 @@ def func():
 	#回答率・正答率のグラフの作成
 	graph_url,graph_url2=make_pic()
 
-	#達成度を示すタグのリンク
+	#達成度を示すタグのリンク(一部停止)
 	tag=taglink()
 
 	# 画像データをHTMLに埋め込む
@@ -84,50 +84,6 @@ def make_pic():
 		else:
 			result3.append((date,None))
 
-		
-	if False:
-		with DB().connect as d:
-			conn,cur = d
-
-			#一時ﾃｰﾌﾞﾙを作る
-			cur.execute(f'''
-				CREATE TEMPORARY TABLE temp AS
-				SELECT * FROM Score WHERE user = '{username}' AND datetime >= DATE('now', '-60 days')
-			''')
-
-			#正答と誤答のｶｳﾝﾄ
-			for date in dates:
-				cur.execute("""
-					SELECT 	SUM(CASE WHEN mode='Judge' AND result = 1 THEN 1 ELSE 0 END) AS J_ac,
-							SUM(CASE WHEN mode='Judge' AND result = 0 THEN 1 ELSE 0 END) AS J_wa,
-							SUM(CASE WHEN mode='Phrase' AND result = 1 THEN 1 ELSE 0 END) AS P_ac,
-							SUM(CASE WHEN mode='Phrase' AND result = 0 THEN 1 ELSE 0 END) AS P_wa
-				FROM temp
-					WHERE datetime BETWEEN ? AND ?;
-				""",(date+" 00:00",date+" 23:59"))
-				res=cur.fetchone()
-
-				res = list(res)
-				if res[0] == None : res[0]=0 
-				if res[1] == None : res[1]=0
-				if res[2] == None : res[2]=0
-				if res[3] == None : res[3]=0
-
-				#表の上限値をﾃﾞｰﾀ量で変える
-				if highest < sum(res) : highest = sum(res)
-
-				result.append((date,res[0]+res[2],res[1]+res[3]))
-
-				if res[0]+res[1]!=0:
-					result2.append((date,res[0]/(res[0]+res[1])))
-				else:
-					result2.append((date,None))
-
-				if res[2]+res[3]!=0:
-					result3.append((date,res[2]/(res[2]+res[3])))
-				else:
-					result3.append((date,None))
-		
 	#正答緑、誤答ｵﾚﾝｼﾞの積上棒ｸﾞﾗﾌを作成する
 	fig, ax = plt.subplots(figsize=(16, 9))
 	fig.patch.set_facecolor((0, 0, 0, 0))
@@ -203,33 +159,36 @@ def taglink():
 		a = url_for('tagchange',word = e[0],link="infiniteQ_Judge")
 
 		#達成率を表す値をいれる
-		if username!="":
-			#tag付きの問題を取る
-			ids = QUESTION.JUDGE.valid_id(tag=[e[0]])
-			ids = [e[0] for e in ids]
+		v=0
+		if False:#実行に時間がかかるので一旦停止
+			if username!="":
+				#tag付きの問題を取る
+				ids = QUESTION.JUDGE.valid_id(tag=[e[0]])
+				ids = [e[0] for e in ids]
 
-			placeholders = ','.join(['?'] * len(ids))
-			query = f"SELECT rate FROM temp WHERE id IN ({placeholders})"
-			with DB().connect as d:
-				conn,cur = d
-				cur.execute(f'''
-				CREATE TEMPORARY TABLE temp AS
-				SELECT * FROM per_user WHERE user = '{username}'
-				''')
+				placeholders = ','.join(['?'] * len(ids))
+				query = f"SELECT rate FROM temp WHERE id IN ({placeholders})"
+				with DB().connect as d:
+					conn,cur = d
+					cur.execute(f'''
+					CREATE TEMPORARY TABLE temp AS
+					SELECT * FROM per_user WHERE user = '{username}'
+					''')
 
-				cur.execute(query,ids)
-				rows = cur.fetchall()
+					cur.execute(query,ids)
+					rows = cur.fetchall()
 
-			values = [row[0] for row in rows if row[0] is not None]
+				values = [row[0] for row in rows if row[0] is not None]
 
-			if len(ids):
-				v=int((sum(values)/len(ids))*100)
+				if len(ids):
+					v=int((sum(values)/len(ids))*100)
+				else:
+					v=0
+
 			else:
 				v=0
 
-		else:
-			v=0
-
 		tmp+=f"""<a class="tag-progress" href="{a}" style="--percent: {v}%;order:{v}"> {e[0]} </a>\n"""
+
 	
 	return tmp
