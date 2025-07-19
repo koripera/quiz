@@ -410,7 +410,7 @@ class QUESTION:
 				if NID!=None:
 					NID=NID[0]
 					data = NOTE.get(NID)
-					content = md.convert(data["content"])
+					content = data["converted_content"]
 
 					Question["C"] = Question["C"].replace("{"+name+"}\n","{"+name+"}")
 					Question["C"] = re.sub("\n*?{", lambda _: "{", Question["C"])

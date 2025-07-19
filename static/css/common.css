@@ -78,7 +78,14 @@ font-size:0.9em;
 color:#555;
 }
 
-div.quote details summary{
+div.quote > details > summary{
+
+background: none;
+padding: 0;
+font-weight: normal;
+cursor: default;
+border-radius: 0px;
+
 display: block;
 list-style: none;
 padding:0;
@@ -87,9 +94,15 @@ color:white;
 font-size:;
 }
 
-div.quote details{
+div.quote > details{
 margin:0;
 white-space:normal;
+
+border: none;
+background: transparent;
+padding: 0;
+margin: 0;
+border-radius: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -127,4 +140,36 @@ margin:1em;
 }
 table,th,td{
 border:1px solid;
+}
+
+/* details 全体を角丸の箱に */
+details {
+    border: 2px outset #ccc;
+    border-radius: 8px;
+    padding: 0.5em;
+    margin: 1em 0;
+}
+
+/* summary は箱のヘッダー風に */
+summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.1em;
+    border-radius: 6px;
+    list-style: none; /* 三角を消す */
+}
+
+/* ブラウザ依存のマーカーを完全に消す */
+summary::-webkit-details-marker {
+    display: none;
+}
+
+/* 開閉状態の summary をスタイル変更（オプション） */
+details[open] > summary {
+    background: #e6e6e6;
+}
+
+/* 中身のコンテンツ */
+details > *:not(summary) {
+    margin-top: 0.5em;
 }

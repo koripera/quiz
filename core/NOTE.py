@@ -5,12 +5,15 @@ import bisect
 import re
 import random
 from operator import itemgetter as iget
+import markdown
 
 from libs.DATABASE import DB
 from setting import DB_PATH
 from util.tools import missingnum
 
 DB.dbname=DB_PATH
+
+md = markdown.Markdown(extensions=["fenced_code","tables"])
 
 class NOTE:
 	def addtag(NID,name):#任意のidにタグを追加{{{
@@ -157,7 +160,7 @@ class NOTE:
 
 	#}}}
 
-	def get(ID):#{{{
+	def get(ID,used=None):#{{{
 		#辞書を返す
 		key = ["NID","name","content"]
 		val = DB().Table("note").Record(f"ID='{ID}'").fetch()
@@ -172,9 +175,64 @@ class NOTE:
 
 		notedata["tag"]   = [e[0] for e in taglist]	
 
-		return notedata
+		notedata["converted_content"] = NOTE.replace_comment(notedata["content"],set([notedata["name"]]) if used==None else used)
 
+		return notedata
 	#}}}
+
+	def replace_comment(content_txt,usednameset):#表示用のデータ生成,mdデータを展開する#{{{
+		#ﾉｰﾄを検索
+		txt=md.convert(content_txt)
+		for name in re.findall(r"{(.*?)}", content_txt):
+			if name in usednameset:
+				continue
+
+			else:
+				q=dedent(
+				f"""
+				SELECT id 
+				FROM note
+				WHERE name = "{name}"
+				""")
+
+				#ﾉｰﾄIDを取得
+				with DB().connect as d:
+					conn,cur = d
+					res = cur.execute(q)
+					ID = res.fetchone()
+
+				#ﾌﾟﾚｰｽﾎﾙﾀﾞの置き換え
+				if ID!=None:
+					ID=ID[0]
+					data = NOTE.get(ID,usednameset)
+					#content = md.convert(data["content"])
+					content = data["converted_content"]
+					#newset=usednameset|set([name])
+					#print(f"newset:{newset}")
+					#content = NOTE.replace_comment(content,newset)
+
+					txt = txt.replace("}\n","}")
+					txt = re.sub("\n*?{", lambda _: "{", txt)
+
+					content =dedent(
+					f"""
+					<div>
+					<details>
+					<summary>{name}</summary>
+					<div>{content}</div>	
+					</details>
+					</div>
+					""")
+
+					content = txt.replace(
+						"{"+name+"}",
+						content,
+					).strip()
+					txt = content
+
+		return txt
+	#}}}
+		
 
 	def make(request):#{{{
 		#新規作成
@@ -208,7 +266,7 @@ class NOTE:
 		return ID
 	#}}}
 
-	def update(ID,request):
+	def update(ID,request):#{{{
 		#問題ﾃﾞｰﾀの更新を行う
 
 		#旧ﾃﾞｰﾀのﾀｲﾄﾙを取得しておく	
@@ -245,8 +303,9 @@ class NOTE:
 		taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
 		for tag in taglist:
 			if tag!="":NOTE.addtag(ID,tag)
+	#}}}
 	
-	def delete(ID):
+	def delete(ID):#{{{
 		#前タグを取得
 		tagnamelist = NOTE.get(ID)["tag"]
 
@@ -259,5 +318,5 @@ class NOTE:
 
 		#問題と回答をそれぞれ削除
 		DB().Table("note").Record(f"ID='{ID}'").delete()
-
+	#}}}
 

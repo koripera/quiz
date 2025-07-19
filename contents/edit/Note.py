@@ -68,13 +68,16 @@ def Edit_note_get(ID):
 			for e in all_ID_P:
 				question+=QUESTION.PHRASE.to_html(e[0],e[1])
 
+		#表示用のデータを作成する
+		data["converted_content"]=NOTE.replace_comment(md.convert(data["content"]),set([data["name"]]))
+
 		#内容の表示
 		result_html = render_template(
 			'Edit_Note.html',
 			title     = data["name"],
 			tag       = ",".join(data["tag"]),
 			content   = data["content"],
-			body      = content,
+			body      = data["converted_content"],
 			question  = question,
 		)
 

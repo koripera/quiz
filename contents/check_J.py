@@ -64,6 +64,7 @@ def func():
 
 	ret["Comment"] = replace_comment(ret["Comment"])
 
+
 	#回答を記録
 	if "username" in session:
 		res = SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
@@ -77,7 +78,9 @@ def func():
 	return ret
 
 
-def replace_comment(txt):
+
+
+def replace_comment(txt):#問題の解説にノートを挿入
 	#ﾉｰﾄからtxt
 	md = markdown.Markdown(extensions=["fenced_code","tables"])
 
@@ -100,7 +103,9 @@ def replace_comment(txt):
 		if ID!=None:
 			ID=ID[0]
 			data = NOTE.get(ID)
-			content = md.convert(data["content"])
+			#content = md.convert(data["content"])
+			content = data["converted_content"]
+			#NOTE.replace_comment(md.convert(data["content"]),set([data["name"]]))
 
 			txt = txt.replace("}\n","}")
 			txt = re.sub("\n*?{", lambda _: "{", txt)
