@@ -1,16 +1,21 @@
+
+.QSET_Phrase{
+	border-radius:0.5em;
+	width:99%;
+	margin:1rem auto;
+	padding:2px;
+}
+
 .QSET_Phrase  .about{
-	color:gray;
 	font-size: 80%;
-	padding:0px 15px;
+	padding:0px 20px;
 }
 
 .QSET_Phrase  .Question{
-	background: #ffffff;
 	word-break: break-all ;
-	border-left: #fceff2 solid 10px;
-	border: #fceff2 solid 1px;
 	font-size: 100%;
 	padding: 15px;
+	margin:0 1em 1em 1em;
 	white-space: pre-wrap;
 }
 
@@ -37,5 +42,22 @@
 	white-space : pre-wrap;
 	padding: 15px;
 }
+
+.Phrase_details {
+    all: unset; 
+	display: block;
+	margin:1em;
+}
+
+.Phrase_details > summary {
+	height:2rem;
+	text-align : center;
+	user-select: none;
+    cursor: pointer;
+    padding: 0.1em;
+    border-radius: 6px;
+}
+
+
 
 

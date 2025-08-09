@@ -1,0 +1,111 @@
+/*色の変更はここで行う*/
+/*base.html内に設定*/
+
+:root {
+  --base: #6b757d;
+  --mid:#c8d0d1;
+  --top:#e4e8e8;
+  --font: #1a1d25;
+}
+
+/**/
+body{
+	background-color: var(--base);
+	color           : var(--font);
+}
+
+/**/
+img{
+	background-color: var(--top);
+}
+
+
+/*ページ上部のリンク*/
+.head{
+	background:var(--base);
+}
+
+/*noteの表示部*/
+div.view{
+	background-color : var(--mid);
+	color            : var(--font);
+}
+
+/*tagのリンク*/
+a.tag{
+	color            : var(--font);
+	background-color : var(--top);
+}
+
+details {
+    border-color: var(--top);
+}
+
+details > summary {
+	color : var(--font);
+}
+
+details[open] > summary {
+    background-color: var(--top);
+}
+
+
+
+/*問題の引用解説*/
+
+div.quote{
+	border-left-color:var(--base);
+}
+div.quote > details > summary{
+	background-color : var(--base);
+	color            : var(--top);
+}
+
+div.quote_content{
+	color:var(--base);
+}
+
+div.quote > details{
+	/*background-color : transparent;*/
+}
+
+/*正誤問題枠*/
+.QSET_Judge{
+	background-color : var(--mid);
+}
+.QSET_Judge .Question{
+	background-color : var(--top);
+	color            : var(--font);
+}
+.QSET_Judge .about{
+	color:var(--font);
+}
+
+
+/*短答問題枠*/
+.QSET_Phrase{
+	background-color:var(--mid);
+	color:var(--font);
+}
+.QSET_Phrase .Question{
+	background: var(--top);
+}
+.QSET_Phrase  .about{
+	color:var(--font);
+}
+.Phrase_details > summary {
+	color : var(--font);
+}
+
+/*検索枠*/
+#change{
+	background-color: var(--mid);
+}
+#floatBtn {
+    background-color: var(--base);
+    /*color: white;*/
+}
+
+
+
+

@@ -3,29 +3,25 @@
 	<div class="log"></div>
 	<div class="about">{{about}}</div>
 	<div class="Question">{{Q}}</div>
-	<HR>
-		<details><summary></summary>
+	
+	<details class="Phrase_details"><summary>▼</summary>
 
 		<div class="result1">{{A}}</div>
 
 		<div class="Comment">{{C|safe}}</div>
 
 		<div class="input">
-		<div class="item1">	
-			<input class=”answer” type="button" name="answer0" value="    OK    " onclick="check_P({{Q_id}},{{abc}},'〇',this)"/>
-			&nbsp;
-			<input class=”answer” type="button" name="answer1" value="    NG    " onclick="check_P({{Q_id}},{{abc}},'×',this)"/>
-		</div>
+			<div class="item1">	
+				<input class=”answer” type="button" name="answer0" value="    OK    " onclick="check_P({{Q_id}},{{abc}},'〇',this)"/>
+				&nbsp;
+				<input class=”answer” type="button" name="answer1" value="    NG    " onclick="check_P({{Q_id}},{{abc}},'×',this)"/>
+			</div>
 
-		<div class="item2">
-			<input class=”answer”  type="button" name="next0" value="除外" onclick="remove({{Q_id}},{{L_id}},this)";/>
-			&nbsp;
-			<input class=”answer”  type="button" name="next1" value="編集" onclick="window.open('{{to_edit}}')";/>
-		</div>
+			<div class="item2">
+				<input class=”answer”  type="button" name="next1" value="編集" onclick="window.open('{{to_edit}}')";/>
+			</div>
 		</div>
 
 	</details>
 
-
-	<HR>
 </div>

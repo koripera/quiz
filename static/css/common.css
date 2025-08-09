@@ -13,13 +13,11 @@ textarea{
 }
 
 body{
-background-color: #999;
-font-family : "monospace";
-overflow-x:hidden;
+	font-family : "monospace";
+	overflow-x:hidden;
 }
 
 img{
-	background-color :rgba(255 255 255 / 40%);
 	border-radius    : 0.5rem;
 }
 
@@ -27,7 +25,6 @@ img{
 	position: fixed;
 	top:0;
 	left: 0;
-	background:#999;
 	width : 100%;
 	z-index:2;
 }
@@ -51,20 +48,17 @@ a.tag{
 	text-decoration  : none;
 	border-radius    : 0.5rem;
 	/*border           : solid;*/
-	border-color     : #888888;
-	color            : black;
-	background-color :rgba(255 255 255 / 40%);
 }
 
 div.quote{
-border-left: 4px solid #888;
+border-left-width: 4px;
+border-left-style: solid;
 white-space: normal;
 margin:0;
 padding:0;
 }
 
 div.view{
-background-color :rgba(255 255 255 / 40%);
 border-radius    : 0.5rem;
 padding:1em 1em;
 padding-bottom:1em;
@@ -75,12 +69,9 @@ margin-bottom: 1em;
 div.quote_content{
 padding:0 1em;
 font-size:0.9em;
-color:#555;
 }
 
 div.quote > details > summary{
-
-background: none;
 padding: 0;
 font-weight: normal;
 cursor: default;
@@ -89,17 +80,12 @@ border-radius: 0px;
 display: block;
 list-style: none;
 padding:0;
-background-color : #888;
-color:white;
-font-size:;
 }
 
 div.quote > details{
 margin:0;
 white-space:normal;
-
 border: none;
-background: transparent;
 padding: 0;
 margin: 0;
 border-radius: 0;
@@ -144,7 +130,8 @@ border:1px solid;
 
 /* details 全体を角丸の箱に */
 details {
-    border: 2px outset #ccc;
+    border-width:2px;
+	border-style: outset ;
     border-radius: 8px;
     padding: 0.5em;
     margin: 1em 0;
@@ -162,11 +149,6 @@ summary {
 /* ブラウザ依存のマーカーを完全に消す */
 summary::-webkit-details-marker {
     display: none;
-}
-
-/* 開閉状態の summary をスタイル変更（オプション） */
-details[open] > summary {
-    background: #e6e6e6;
 }
 
 /* 中身のコンテンツ */

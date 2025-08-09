@@ -2,7 +2,6 @@
 .QSET_Judge{
 	border-radius:0.5em;
 	width:99%;
-	background-color:rgba(255 255 255 / 40%);
 	margin:1rem auto;
 	padding:2px;
 }
@@ -12,17 +11,13 @@
 }
 
 .QSET_Judge .about{
-	color:gray;
 	font-size: 80%;
 	padding:0px 20px;
 }
 
 .QSET_Judge .Question{
 	border-radius:0.1em;
-	background: #ffffff;
 	word-break: break-all ;
-	border-left: #fceff2 solid 10px;
-	border: #fceff2 solid 1px;
 	font-size: 100%;
 	padding: 15px;
 	margin:0 1em 1em 1em;
