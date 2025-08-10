@@ -113,7 +113,7 @@ def replace_comment(txt):#問題の解説にノートを挿入
 			content =dedent(
 			f"""
 			<div class='quote'>
-			<details open>
+			<details>
 			<summary>{name}</summary>
 			<div class='quote_content'>{content}</div>	
 			</details>

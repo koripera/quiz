@@ -418,7 +418,7 @@ class QUESTION:
 					content =dedent(
 					f"""
 					<div class='quote'>
-					<details open>
+					<details>
 					<summary>{name}</summary>
 					<div class='quote_content'>{content}</div>	
 					</details>
