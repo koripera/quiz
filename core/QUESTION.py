@@ -386,59 +386,12 @@ class QUESTION:
 					long = "__"*(width//2)
 					Question["Q"] = Question["Q"].replace("{"+chara+"}",f"[{long}]")
 
-			#ﾀｸﾞをﾘﾝｸにして、変更を簡易にする
-			tags_html="\n\ntag:"
-			for tagname in Question["tag"]:
-				link = url_for('tagchange',word = tagname,link="infiniteQ_Phrase")
-				tags_html += f"""<a class="tag" href="{link}"> {tagname} </a>"""
-
-			#ﾉｰﾄからの引用をできるように・・・
-			md = markdown.Markdown(extensions=["fenced_code","tables"])
-			for name in re.findall(r"{(.*?)}", Question["C"]):
-				q=dedent(
-				f"""
-				SELECT id 
-				FROM note
-				WHERE name = "{name}"
-				""")
-
-				with DB().connect as d:
-					conn,cur = d
-					res = cur.execute(q)
-					NID = res.fetchone()
-
-				if NID!=None:
-					NID=NID[0]
-					data = NOTE.get(NID)
-					content = data["converted_content"]
-
-					Question["C"] = Question["C"].replace("{"+name+"}\n","{"+name+"}")
-					Question["C"] = re.sub("\n*?{", lambda _: "{", Question["C"])
-
-					content =dedent(
-					f"""
-					<div class='quote'>
-					<details>
-					<summary>{name}</summary>
-					<div class='quote_content'>{content}</div>	
-					</details>
-					</div>
-					""")
-
-					Question["C"] = Question["C"].replace(
-						"{"+name+"}",
-						content,
-					).strip()
-
 			return render_template(
 							'parts/QSET_Phrase.html',
-							to_edit   = url_for("edit.phrase",ID=ID),
 							about     = f"< {' '.join( Question['about']) } >",
 							Q         = Question["Q"],
-							A         = "答："+answer,
-							C         = Question["C"]+tags_html,
 							Q_id      = ID,
-							abc       = f"'{chara}'"
+							abc       = f"{chara}"
 							)	
 
 		def get(ID):
