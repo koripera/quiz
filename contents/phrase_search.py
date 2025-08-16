@@ -7,9 +7,9 @@
 __all__ = ["args","func"]
 
 args={
-"rule"                      : "/judge_search",
+"rule"                      : "/phrase_search",
 "methods"                   : ["POST"],
-"endpoint"                  : "judge_search",
+"endpoint"                  : "phrase_search",
 #"strict_slashes"            : ,
 #"provide_automatic_options" : ,
 #"defaults"                  : ,
@@ -38,7 +38,7 @@ def func():
 	#session["inC"]=query3
 	#session["tag"]=query1
 
-	match = {e[0] for e in QUESTION.JUDGE.valid_id(tag=query1,inQ=query2,inC=query3)}
+	match = {e for e in QUESTION.PHRASE.valid_id(tag=query1,inQ=query2,inC=query3)}
 	
 	data = {
 		"match":list(match),

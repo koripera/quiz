@@ -54,19 +54,20 @@ def Edit_note_get(ID):
 		#noteの内容をhtmlに変換
 		content = md.convert(data["content"])
 
-		#ﾀｲﾄﾙが含まれる問題を取得する
-		all_ID_J = QUESTION.JUDGE.valid_id(inC="{"+data["name"]+"}")
-		all_ID_P = QUESTION.PHRASE.valid_id(inC="{"+data["name"]+"}")
+		if False:#javascript側で呼び出す
+			#ﾀｲﾄﾙが含まれる問題を取得する
+			all_ID_J = QUESTION.JUDGE.valid_id(inC="{"+data["name"]+"}")
+			all_ID_P = QUESTION.PHRASE.valid_id(inC="{"+data["name"]+"}")
 
-		#出題可能な問題がなければ、処理しない
-		if not all_ID_J + all_ID_P:
-			question = "noQuestion"
-		else:
-			question=""
-			for e in all_ID_J:
-				question+=QUESTION.JUDGE.to_html(e[0])
-			for e in all_ID_P:
-				question+=QUESTION.PHRASE.to_html(e[0],e[1])
+			#出題可能な問題がなければ、処理しない
+			if not all_ID_J + all_ID_P:
+				question = "noQuestion"
+			else:
+				question=""
+				for e in all_ID_J:
+					question+=QUESTION.JUDGE.to_html(e[0])
+				for e in all_ID_P:
+					question+=QUESTION.PHRASE.to_html(e[0],e[1])
 
 		#表示用のデータを作成する
 		data["converted_content"]=NOTE.replace_comment(md.convert(data["content"]),set([data["name"]]))
@@ -78,7 +79,7 @@ def Edit_note_get(ID):
 			tag       = ",".join(data["tag"]),
 			content   = data["content"],
 			body      = data["converted_content"],
-			question  = question,
+			#question  = question,
 		)
 
 		return result_html
