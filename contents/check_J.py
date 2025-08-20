@@ -30,6 +30,7 @@ import markdown
 from core.QUESTION import QUESTION
 from core.SCORE import SCORE
 from core.NOTE import NOTE
+from core.PROGRESS import PROGRESS
 
 from libs.DATABASE import DB
 from setting import DB_PATH
@@ -70,12 +71,20 @@ def func():
 		res = SCORE.insert(session['username'],QID,None,1 if ans==answer else 0)
 		ret["logg"] = "".join(["〇" if e else "×" for e in res])
 
+		#進捗への反映
+		for tagname in Qdata["tag"]:
+			ID=DB().Table("tag").Record(f"name = '{tagname}'").fetchone("ID")[0]
+			PROGRESS.update(session['username'],"tag",ID,ret["logg"][-10:].count("〇"))
+
 	else:
 		ret["logg"] = ""
 
 
 
+
+
 	return ret
+
 
 
 

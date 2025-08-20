@@ -11,6 +11,7 @@ import markdown
 from libs.DATABASE import DB
 
 from core.NOTE import NOTE
+from core.TAG import TAG
 from setting import DB_PATH
 from util.tools import missingnum
 from util.tools import get_east_asian_width_count
@@ -21,41 +22,13 @@ class QUESTION:
 	def addtag(mode,QID,name):#任意のidにタグを追加
 		
 		#ﾀｸﾞのﾘｽﾄから、追加したいﾀｸﾞがあるか確認する
-		q=dedent(
-			f"""
-			SELECT ID
-			FROM tag
-			WHERE name = ?
-			""")
-		with DB().connect as d:
-			conn,cur = d
-			cur.execute(q,(name,))
-			res = cur.fetchone()
-
-		#無いﾀｸﾞなら、新規に追加して、IDを取る
-		if res == None:
-			#新規作成用のIDを探す
-			with DB().connect as d:
-				conn,cur = d
-				cur.execute("SELECT id FROM tag")
-				idlist=sorted([e[0] for e in cur.fetchall()])
-
-			tagID = missingnum(idlist)
-
-			#ﾀｸﾞﾃﾞｰﾀに追加
-			with DB().connect as d:
-				conn,cur = d
-				cur.execute(f'INSERT INTO tag VALUES (?,?)',(tagID,name))
-				conn.commit()
-
-		#既存ﾀｸﾞならそのIDを取得する
-		else:
-			tagID=res[0]
+		tagID = TAG.name_to_id(name)
+		if tagID==None:
+			tagID=TAG.make(name)
 
 		#itemIDとﾀｸﾞIDを結びつける
 		table = "Question_J_tag" if mode=="Judge" else "Question_P_tag"
-		with DB().connect as d:
-			conn,cur = d
+		with DB().connect as (conn,cur):
 			cur.execute(f'INSERT INTO {table} VALUES (?,?)',(QID,tagID))
 			conn.commit()
 
@@ -99,8 +72,12 @@ class QUESTION:
 			ntag = cur.fetchall()
 			if ntag:return
 
+		res = TAG.name_to_id(name)
 		#judge.phrase.noteいずれでも使われてないなら、ﾀｸﾞのﾚｺｰﾄﾞを削除
 		DB().Table("tag").Record(f"name='{name}'").delete()
+
+		#Progressも削除
+		DB().Table("Progress").Record(f"type = 'tag' AND id ={res}").delete()
 
 
 	class JUDGE:
@@ -234,10 +211,11 @@ class QUESTION:
 			DB().Table("Question_J").add_record(insdata)
 
 			#ﾀｸﾞを追加する
-			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
+			tagnamelist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
 
-			for tag in taglist:
-				if tag!="":QUESTION.addtag("Judge",ID,tag)
+			for tagname in tagnamelist:
+				if tagname!="":QUESTION.addtag("Judge",ID,tagname)
+				TAG.add_qcnt(name=tagname)#問題数のカウント
 
 			return ID
 
@@ -274,12 +252,14 @@ class QUESTION:
 		
 			#修正前タグリストから、タグを消すかチェック
 			for tagname in tagnamelist:
+				TAG.sub_qcnt(name=tagname)
 				QUESTION.deltag(tagname)			
 	
 			#ﾀｸﾞを追加する
 			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
 			for tag in taglist:
 				if tag!="":QUESTION.addtag("Judge",ID,tag)
+				TAG.add_qcnt(name=tagname)
 		
 		def delete(ID):
 			#使うID
@@ -293,6 +273,7 @@ class QUESTION:
 		
 			#修正前タグリストから、タグを消すかチェック
 			for tagname in tagnamelist:
+				TAG.sub_qcnt(name=tagname)
 				QUESTION.deltag(tagname)
 
 			#IDlistからIDを削除する
@@ -438,17 +419,14 @@ class QUESTION:
 			#ﾃﾞｰﾀﾍﾞｰｽに反映
 			DB().Table("Question_P").add_record(insdata)
 
-			#ﾀｸﾞを追加する
-			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
-			
-			for tag in taglist:
-				if tag!="":QUESTION.addtag("Phrase",ID,tag)
 
 			#解答ﾃﾞｰﾀの作成と挿入
 			A={}
+			ans_n=0
 			for s in list("ABCDEN"):
 				if "" != (ans:=request.form.get(s).strip()):
 					A[s] = ans
+					ans_n+=1
 			
 			for chara,answer in A.items():
 				insdata={
@@ -460,12 +438,21 @@ class QUESTION:
 				#ﾃﾞｰﾀﾍﾞｰｽに反映
 				DB().Table("Question_P_v").add_record(insdata)
 
+
+			#ﾀｸﾞを追加する
+			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
+			
+			for tag in taglist:
+				if tag!="":QUESTION.addtag("Phrase",ID,tag)
+				TAG.add_qcnt(name=tag,n=ans_n)
+
+
 			return ID
 
 		def update(ID,request):
 			#使うID
 			ID=int(ID)
-			
+
 			#挿入ﾃﾞｰﾀの作成し、入力をﾃﾞｰﾀﾍﾞｰｽに入れる
 			insdata={
 				"ID"    : ID,
@@ -479,32 +466,31 @@ class QUESTION:
 			DB().Table("Question_P").Record(f"ID={ID}").update(insdata)
 
 			#前タグを取得
-			tagnamelist = QUESTION.PHRASE.get(ID)["tag"]
+			data = QUESTION.PHRASE.get(ID)
+			tagnamelist = data["tag"]
+			#変更前の問題数
+			basecnt=len(data["A"])
 
 			#タグを削除
 			DB().Table("Question_P_tag").Record(f"QID={ID}").delete()
 		
 			#修正前タグリストから、タグを消すかチェック
 			for tagname in tagnamelist:
+				TAG.sub_qcnt(name=tagname,n=basecnt)
 				QUESTION.deltag(tagname)
-
-			#ﾀｸﾞを追加する
-			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
-			
-			for tag in taglist:
-				if tag!="":QUESTION.addtag("Phrase",ID,tag)	
-
 
 			#解答は一度全部消す
 			#解答ﾃﾞｰﾀの作成と挿入
 			DB().Table("Question_P_v").Record(f"ID={ID}").delete()
 
 			A={}
+			ans_n=0
 			#入力ﾃﾞｰﾀを元に整理する
 			for s in list("ABCDEN"):
 				#入力を確認
 				if "" != (ans:=request.form.get(s).strip()):
 					A[s] = ans
+					ans_n+=1
 
 				#解答がないものは解答履歴も消す
 				else:
@@ -519,6 +505,14 @@ class QUESTION:
 				}
 				DB().Table("Question_P_v").add_record(insdata)
 
+			#ﾀｸﾞを追加する
+			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
+			
+			for tag in taglist:
+				if tag!="":QUESTION.addtag("Phrase",ID,tag)
+				TAG.add_qcnt(name=tagname,n=ans_n)
+
+
 
 					
 
@@ -527,13 +521,16 @@ class QUESTION:
 			ID = int(ID)
 
 			#前タグを取得
-			tagnamelist = QUESTION.PHRASE.get(ID)["tag"]
+			data=QUESTION.PHRASE.get(ID)
+			tagnamelist = data["tag"]
+			basecnt = len(data["A"])#問題数
 
 			#タグを削除
 			DB().Table("Question_P_tag").Record(f"QID={ID}").delete()
 		
 			#修正前タグリストから、タグを消すかチェック
 			for tagname in tagnamelist:
+				TAG.sub_qcnt(name=tagname,n=basecnt)
 				QUESTION.deltag(tagname)
 
 			#IDlistからIDを削除する

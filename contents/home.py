@@ -26,6 +26,7 @@ import base64
 
 from core.QUESTION import QUESTION
 from core.SCORE import SCORE
+from core.PROGRESS import PROGRESS
 
 from libs.DATABASE import DB
 import contents.__parts as parts
@@ -160,6 +161,14 @@ def taglink():
 
 		#達成率を表す値をいれる
 		v=0
+
+		if username!="":#Progressテーブルを使って達成率を得る
+			tagID = DB().Table("tag").Record(f"name = '{e[0]}'").fetchone("ID")[0]
+			d=PROGRESS.get(username,"tag",tagID)
+			v = d[3]/10 if d else 0
+			#print(v)
+			
+
 		if False:#実行に時間がかかるので一旦停止
 			if username!="":
 				#tag付きの問題を取る
@@ -188,7 +197,7 @@ def taglink():
 			else:
 				v=0
 
-		tmp+=f"""<a class="tag-progress" href="{a}" style="--percent: {v}%;order:{v}"> {e[0]} </a>\n"""
+		tmp+=f"""<a class="tag-progress" href="{a}" style="--percent: {v}%;order:{int(v*10)}"> {e[0]} </a>\n"""
 
 	
 	return tmp
