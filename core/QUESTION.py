@@ -260,7 +260,7 @@ class QUESTION:
 			for tag in taglist:
 				if tag!="":
 					QUESTION.addtag("Judge",ID,tag)
-					TAG.add_qcnt(name=tagname)
+					TAG.add_qcnt(name=tag)
 		
 		def delete(ID):
 			#使うID
