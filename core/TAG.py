@@ -17,7 +17,7 @@ class TAG:
 
 		#ﾀｸﾞﾃﾞｰﾀに追加
 		with DB().connect as (conn,cur):
-			cur.execute(f'INSERT INTO tag VALUES (?,?)',(tagID,name))
+			cur.execute(f'INSERT INTO tag VALUES (?,?,0)',(tagID,name))
 			conn.commit()
 
 		#作成したIDを返す

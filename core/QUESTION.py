@@ -258,8 +258,9 @@ class QUESTION:
 			#ﾀｸﾞを追加する
 			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
 			for tag in taglist:
-				if tag!="":QUESTION.addtag("Judge",ID,tag)
-				TAG.add_qcnt(name=tagname)
+				if tag!="":
+					QUESTION.addtag("Judge",ID,tag)
+					TAG.add_qcnt(name=tagname)
 		
 		def delete(ID):
 			#使うID
