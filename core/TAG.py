@@ -36,7 +36,7 @@ class TAG:
 		with DB().connect as (conn,cur):
 			cur.execute(q,(name,))
 			res = cur.fetchone()
-		return res[0]
+		return res[0] if res!=None else None
 
 	def get_qcnt(ID=None,name=None):
 		if ID  :return DB().Table("tag").Record(f"ID = {ID}").fetchone("qcount")[0]

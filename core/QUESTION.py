@@ -509,8 +509,9 @@ class QUESTION:
 			taglist = [s.strip() for s in re.split('[、,]',request.form.get("tag"))]
 			
 			for tag in taglist:
-				if tag!="":QUESTION.addtag("Phrase",ID,tag)
-				TAG.add_qcnt(name=tagname,n=ans_n)
+				if tag!="":
+					QUESTION.addtag("Phrase",ID,tag)
+					TAG.add_qcnt(name=tagname,n=ans_n)
 
 
 
