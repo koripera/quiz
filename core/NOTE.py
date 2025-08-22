@@ -7,6 +7,7 @@ import random
 from operator import itemgetter as iget
 import markdown
 
+from core.TAG import TAG
 from libs.DATABASE import DB
 from setting import DB_PATH
 from util.tools import missingnum
@@ -17,39 +18,10 @@ md = markdown.Markdown(extensions=["fenced_code","tables"])
 
 class NOTE:
 	def addtag(NID,name):#任意のidにタグを追加{{{
-		
 		#ﾀｸﾞのﾘｽﾄから、追加したいﾀｸﾞがあるか確認する
-		q=dedent(
-			f"""
-			SELECT ID
-			FROM tag
-			WHERE name = ?
-			""")
-
-		with DB().connect as d:
-			conn,cur = d
-			cur.execute(q,(name,))
-			res = cur.fetchone()
-
-		#無いﾀｸﾞなら、新規に追加して、IDを取る
-		if res == None:
-			#新規作成用のIDを探す
-			with DB().connect as d:
-				conn,cur = d
-				cur.execute("SELECT id FROM tag")
-				idlist=sorted([e[0] for e in cur.fetchall()])
-
-			tagID = missingnum(idlist)
-
-			#ﾀｸﾞﾃﾞｰﾀに追加
-			with DB().connect as d:
-				conn,cur = d
-				cur.execute(f'INSERT INTO tag VALUES (?,?)',(tagID,name))
-				conn.commit()
-
-		#既存ﾀｸﾞならそのIDを取得する
-		else:
-			tagID=res[0]
+		tagID = TAG.name_to_id(name)
+		if tagID==None:
+			tagID=TAG.make(name)
 
 		#itemIDとﾀｸﾞIDを結びつける
 		table = "note_tag"
